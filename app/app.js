@@ -2463,6 +2463,20 @@ function toggleDemoHelp() {
   showToast('Akun bawaan: Admin (admin / admin), Supervisor (51200 / 51200), Karyawan (31634454 / 31634454).', 'info');
 }
 
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('app-sidebar') || document.querySelector('.sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) sidebar.classList.toggle('open');
+  if (backdrop) backdrop.classList.toggle('active');
+}
+
+function closeMobileSidebar() {
+  const sidebar = document.getElementById('app-sidebar') || document.querySelector('.sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (sidebar) sidebar.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('active');
+}
+
 function switchTab(tabId) {
   const db = getDb();
   db.activeTab = tabId;
@@ -2471,6 +2485,7 @@ function switchTab(tabId) {
     renderSidebar(db.currentUser.role);
   }
   renderContent();
+  closeMobileSidebar();
 }
 
 // --- RENDER APLIKASI UTAMA SETELAH LOGIN ---
@@ -2819,7 +2834,7 @@ function renderDashboardView(role, db) {
       </div>
 
       <!-- Toolbar Filter & Pencarian -->
-      <div style="display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; background: #f8fafc; padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+      <div class="dashboard-filter-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; background: #f8fafc; padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
         <!-- Input Pencarian Nama Karyawan / NIK / Gedung -->
         <div style="position: relative; flex: 1; min-width: 260px;">
           <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; pointer-events: none; color: #94a3b8;">🔍</span>

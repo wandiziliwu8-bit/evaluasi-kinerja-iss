@@ -111,6 +111,13 @@
     <!-- Top Navigation Bar (Header) -->
     <header class="navbar">
       <div class="nav-left">
+        <button type="button" class="btn-sidebar-toggle" id="btn-sidebar-toggle" onclick="toggleMobileSidebar()" aria-label="Toggle Menu Navigasi">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
         <img src="logo_iss.jpg" alt="Logo PT ISS Indonesia" class="nav-logo-small">
         <div class="system-titles">
           <span class="system-title-main">SISTEM PENILAIAN KINERJA KARYAWAN</span>
@@ -128,16 +135,18 @@
         </div>
 
         <button class="btn btn-outline btn-sm" onclick="handleLogout()" style="color:var(--danger); border-color:#fecaca">
-          🚪 Keluar
+          🚪 <span class="logout-text">Keluar</span>
         </button>
       </div>
     </header>
 
     <!-- Wrapper Sidebar Navigasi & Main Area Konten -->
     <div class="layout-body">
+      <!-- Backdrop untuk Mobile Drawer -->
+      <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="closeMobileSidebar()"></div>
       
       <!-- Sidebar Menu Dinamis Sesuai Peran -->
-      <aside class="sidebar">
+      <aside class="sidebar" id="app-sidebar">
         <div class="sidebar-header-label">NAVIGASI SISTEM</div>
         <ul class="sidebar-menu" id="sidebar-menu-list">
           <!-- Otomatis diisi oleh JavaScript berdasarkan peran pengguna yang login -->

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Informasi Penilaian Kinerja Karyawan - PT ISS Indonesia</title>
+  
+  <!-- Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- =====================================================================
+       1. HALAMAN LOGIN (RESMI, BERSIH, STANDAR APLIKASI ENTERPRISE)
+       ===================================================================== -->
+  <section id="login-section" class="login-wrapper">
+    <div class="login-card">
+      
+      <!-- Logo & Brand Header -->
+      <div class="brand-header">
+        <div class="logo-badge">
+          <img src="logo_iss.jpg" alt="Logo PT ISS Indonesia" class="iss-logo-img">
+        </div>
+        <h1 class="login-title">Sistem Penilaian Kinerja Karyawan</h1>
+        <p class="login-subtitle">PT ISS Indonesia &bull; Unit Kerja Pemda Tangerang Selatan</p>
+      </div>
+
+      <!-- Tampilan Notifikasi Kesalahan Login -->
+      <div id="login-error-alert" class="error-alert">
+        <div class="error-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div class="error-content">
+          <h4>Gagal Masuk</h4>
+          <p id="login-error-desc">NIK atau kata sandi yang Anda masukkan salah.</p>
+        </div>
+      </div>
+
+      <!-- Formulir Login Standar (Normal Seperti Aplikasi Modern) -->
+      <form id="login-form" onsubmit="handleLogin(event)" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="username">Nomor Induk Karyawan (NIK) / Username</label>
+          <div class="input-icon-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </span>
+            <input type="text" id="username" class="form-input with-icon" placeholder="Masukkan NIK atau Username" autocomplete="username" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-row">
+            <label class="form-label" for="password">Kata Sandi</label>
+            <span class="form-hint-link" onclick="toggleDemoHelp()" title="Klik untuk bantuan kredensial login">Bantuan Akses?</span>
+          </div>
+          <div class="input-icon-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <input type="password" id="password" class="form-input with-icon with-action" placeholder="Masukkan kata sandi" autocomplete="current-password" required>
+            <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility()" aria-label="Lihat kata sandi">
+              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="remember-me" checked>
+            <span>Ingat saya di perangkat ini</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-login">
+          <span>Masuk ke Akun</span>
+        </button>
+      </form>
+
+      <div class="login-footer" style="margin-top: 24px;">
+        &copy; 2026 PT ISS Indonesia &bull; Seluruh hak cipta dilindungi
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       2. TAMPILAN DASHBOARD SISTEM (SETELAH BERHASIL LOGIN)
+       ===================================================================== -->
+  <div id="app-container" class="app-layout app-container" style="display: none;">
+    
+    <!-- Top Navigation Bar (Header) -->
+    <header class="navbar">
+      <div class="nav-left">
+        <img src="logo_iss.jpg" alt="Logo PT ISS Indonesia" class="nav-logo-small">
+        <div class="system-titles">
+          <span class="system-title-main">SISTEM PENILAIAN KINERJA KARYAWAN</span>
+          <span class="system-title-sub">PT ISS INDONESIA &bull; UNIT PEMDA TANGERANG SELATAN</span>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <div class="user-profile-badge">
+          <div class="user-avatar" id="nav-user-avatar">US</div>
+          <div class="user-meta">
+            <span class="user-name" id="nav-user-name">Nama Pengguna</span>
+            <span class="user-role-tag" id="nav-user-role">Role</span>
+          </div>
+        </div>
+
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()" style="color:var(--danger); border-color:#fecaca">
+          🚪 Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- Wrapper Sidebar Navigasi & Main Area Konten -->
+    <div class="layout-body">
+      
+      <!-- Sidebar Menu Dinamis Sesuai Peran -->
+      <aside class="sidebar">
+        <div class="sidebar-header-label">NAVIGASI SISTEM</div>
+        <ul class="sidebar-menu" id="sidebar-menu-list">
+          <!-- Otomatis diisi oleh JavaScript berdasarkan peran pengguna yang login -->
+        </ul>
+
+        <div style="margin-top:auto; padding-top:16px; border-top:1px solid var(--border-color); font-size:0.72rem; color:var(--text-muted); text-align:center">
+          <div>PT ISS Indonesia &copy; 2026</div>
+          <div style="font-weight:600; color:var(--iss-navy); margin-top:2px">Area PEMDA Tangerang Selatan</div>
+        </div>
+      </aside>
+
+      <!-- Area Kerja Konten Utama -->
+      <main class="main-content" id="main-workspace">
+        <!-- Komponen halaman dimuat di sini -->
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- Modal Edit Penilaian Kinerja Karyawan -->
+  <div id="modal-edit-penilaian" class="modal-overlay">
+    <div class="modal-window" style="max-width: 650px;">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin-bottom: 4px;">✏️ Edit Penilaian Kinerja Karyawan</h3>
+          <p id="edit-modal-subtitle" style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">
+            Karyawan: AMINUDIN (NIK: R1634454)
+          </p>
+        </div>
+        <button class="btn-close" onclick="closeEditPenilaianModal()" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" id="edit-penilaian-id">
+
+        <!-- Live Preview Score Box -->
+        <div class="modal-score-card">
+          <div>
+            <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+              Kalkulasi Nilai Akhir
+            </div>
+            <div class="modal-score-preview">
+              <div class="modal-score-val" id="edit-live-score">88.45</div>
+              <div>
+                <span class="modal-grade-pill grade-badge grade-A" id="edit-live-grade">Grade A</span>
+                <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px; font-weight: 600;" id="edit-live-kategori">
+                  Sangat Baik
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 0.75rem; color: var(--text-muted);">
+            <div>Bobot Aspek:</div>
+            <div>20% | 35% | 25% | 20%</div>
+          </div>
+        </div>
+
+        <!-- 4 Criteria Number Inputs -->
+        <div class="modal-input-grid">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="edit-input-disiplin">
+              1. Disiplin &amp; Presensi <span style="color: var(--iss-navy); font-weight: 700;">(20%)</span>
+            </label>
+            <input type="number" id="edit-input-disiplin" class="form-input" min="0" max="100" step="1" oninput="calcModalEditScoreLive()">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="edit-input-kualitas">
+              2. Kualitas &amp; Kerapihan <span style="color: var(--iss-navy); font-weight: 700;">(35%)</span>
+            </label>
+            <input type="number" id="edit-input-kualitas" class="form-input" min="0" max="100" step="1" oninput="calcModalEditScoreLive()">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="edit-input-tanggung">
+              3. Tanggung Jawab &amp; SOP <span style="color: var(--iss-navy); font-weight: 700;">(25%)</span>
+            </label>
+            <input type="number" id="edit-input-tanggung" class="form-input" min="0" max="100" step="1" oninput="calcModalEditScoreLive()">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="edit-input-kerjasama">
+              4. Kerjasama Tim <span style="color: var(--iss-navy); font-weight: 700;">(20%)</span>
+            </label>
+            <input type="number" id="edit-input-kerjasama" class="form-input" min="0" max="100" step="1" oninput="calcModalEditScoreLive()">
+          </div>
+        </div>
+
+        <!-- Status & Notes -->
+        <div class="form-group" style="margin-top: 14px;">
+          <label class="form-label" for="edit-select-status">Status Penilaian</label>
+          <select id="edit-select-status" class="form-input">
+            <option value="FINAL">🔒 FINAL (Terkunci &amp; Resmi)</option>
+            <option value="DRAFT">📝 DRAFT (Draf Sementara)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="edit-input-catatan">Catatan / Umpan Balik Supervisor</label>
+          <textarea id="edit-input-catatan" class="form-input" rows="3" placeholder="Tuliskan catatan apresiasi atau evaluasi kinerja..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button type="button" class="btn btn-outline" onclick="closeEditPenilaianModal()">Batal</button>
+        <button type="button" class="btn btn-primary" onclick="handleSaveEditPenilaian()">💾 Simpan Perubahan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Pengguna & Kata Sandi -->
+  <div id="modal-edit-user" class="modal-overlay">
+    <div class="modal-window" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 style="margin: 0;">✏️ Edit Data &amp; Hak Akses Pengguna</h3>
+        <button class="btn-close" onclick="closeEditUserModal()" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-user-id">
+
+        <div class="form-group">
+          <label class="form-label" for="edit-user-nama">Nama Lengkap Pengguna</label>
+          <input type="text" id="edit-user-nama" class="form-input" placeholder="Masukkan nama lengkap" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-user-nik">Username / Nomor Induk Karyawan (NIK)</label>
+          <input type="text" id="edit-user-nik" class="form-input" placeholder="Contoh: R1634454 atau admin" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-user-role">Hak Akses (Peran Sistem)</label>
+          <select id="edit-user-role" class="form-input">
+            <option value="admin">Administrator (HRD)</option>
+            <option value="supervisor">Supervisor Operasional</option>
+            <option value="karyawan">Petugas Cleaning Service</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-user-status">Status Karyawan</label>
+          <select id="edit-user-status" class="form-input">
+            <option value="Tetap">Karyawan Tetap</option>
+            <option value="Kontrak">Karyawan Kontrak</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="edit-user-password">Ubah Kata Sandi (Opsional)</label>
+          <input type="text" id="edit-user-password" class="form-input" placeholder="Biarkan kosong jika tidak ingin mengubah sandi">
+          <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">
+            Admin dapat langsung menetapkan kata sandi baru untuk akun ini di sini.
+          </small>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button type="button" class="btn btn-outline" onclick="closeEditUserModal()">Batal</button>
+        <button type="button" class="btn btn-primary" onclick="saveEditUser()">💾 Simpan Perubahan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah Pengguna Baru -->
+  <div id="modal-add-user" class="modal-overlay">
+    <div class="modal-window" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 style="margin: 0;">➕ Tambah Pengguna Baru</h3>
+        <button class="btn-close" onclick="closeAddUserModal()" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="add-user-nama">Nama Lengkap Pengguna</label>
+          <input type="text" id="add-user-nama" class="form-input" placeholder="Masukkan nama lengkap" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-user-nik">Username / NIK Akun</label>
+          <input type="text" id="add-user-nik" class="form-input" placeholder="Masukkan NIK atau Username" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-user-role">Hak Akses (Peran)</label>
+          <select id="add-user-role" class="form-input">
+            <option value="karyawan">Petugas Cleaning Service</option>
+            <option value="supervisor">Supervisor Operasional</option>
+            <option value="admin">Administrator (HRD)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-user-status">Status Karyawan</label>
+          <select id="add-user-status" class="form-input">
+            <option value="Tetap">Karyawan Tetap</option>
+            <option value="Kontrak">Karyawan Kontrak</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="add-user-password">Kata Sandi Awal</label>
+          <input type="text" id="add-user-password" class="form-input" placeholder="Default: Sesuai Username / NIK">
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button type="button" class="btn btn-outline" onclick="closeAddUserModal()">Batal</button>
+        <button type="button" class="btn btn-primary" onclick="saveAddUser()">➕ Daftarkan Akun</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Modal Buka Periode Baru -->
+  <div id="modal-tambah-periode" class="modal-overlay" onclick="if(event.target === this) closeTambahPeriodeModal()">
+    <div class="modal-window" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--iss-navy);">📅 Buka Periode Penilaian Baru</h3>
+        <button class="btn-close" onclick="closeTambahPeriodeModal()" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Buka siklus evaluasi penilaian baru untuk seluruh petugas cleaning service.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="input-periode-nama">Nama Periode Evaluasi</label>
+          <input type="text" id="input-periode-nama" class="form-input" placeholder="Contoh: Periode November 2026" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-periode-kode">Kode Periode</label>
+          <input type="text" id="input-periode-kode" class="form-input" placeholder="Contoh: PER-2026-11" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label" for="input-periode-mulai">Tanggal Mulai</label>
+            <input type="date" id="input-periode-mulai" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-periode-selesai">Tanggal Selesai</label>
+            <input type="date" id="input-periode-selesai" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="input-periode-status">Status Periode</label>
+          <select id="input-periode-status" class="form-input">
+            <option value="Aktif">Aktif / Berjalan (Jadikan Siklus Penilaian Aktif)</option>
+            <option value="Selesai">Selesai / Arsip</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button type="button" class="btn btn-outline" onclick="closeTambahPeriodeModal()">Batal</button>
+        <button type="button" class="btn btn-primary" onclick="simpanTambahPeriode()">💾 Buka &amp; Simpan Periode</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perancangan UML & ERD - PT ISS Indonesia (Area PEMDA Tangsel)</title>
+    <!-- Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-dark: #172554;
+            --accent: #0284c7;
+            --success: #059669;
+            --warning: #d97706;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 320px;
+            background: #ffffff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
+            color: white;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-header p {
+            font-size: 0.75rem;
+            color: #bae6fd;
+            margin-top: 4px;
+        }
+
+        .nav-category {
+            padding: 14px 18px 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0 10px 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 9px 12px;
+            margin-bottom: 3px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--primary-light);
+            font-weight: 600;
+            border-left: 3px solid var(--primary-light);
+        }
+
+        .nav-item .icon {
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        /* Content Area */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .topbar h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-outline {
+            background: white;
+            border-color: #cbd5e1;
+            color: #334155;
+        }
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .content-container {
+            padding: 28px 32px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .card-desc {
+            font-size: 0.88rem;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .actor-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+        .badge-admin { background: #f3e8ff; color: #7e22ce; }
+        .badge-spv { background: #e0f2fe; color: #0369a1; }
+        .badge-karyawan { background: #dcfce7; color: #15803d; }
+        .badge-sistem { background: #f1f5f9; color: #475569; }
+
+        /* Diagram View Container */
+        .diagram-container {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+            min-height: 380px;
+        }
+
+        .code-container {
+            position: relative;
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin-top: 14px;
+        }
+
+        .code-container pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+
+        .btn-copy {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-copy:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .section-view {
+            display: none;
+        }
+        .section-view.active {
+            display: block;
+        }
+
+        /* Guide Card */
+        .guide-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .guide-box h4 {
+            color: #166534;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        .guide-box ol {
+            margin-left: 20px;
+            color: #1e3a8a;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        table.spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.84rem;
+            margin-top: 14px;
+        }
+        table.spec-table th, table.spec-table td {
+            border: 1px solid #e2e8f0;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        table.spec-table th {
+            background: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside>
+        <div class="sidebar-header">
+            <h1>Perancangan UML & ERD</h1>
+            <p>PT ISS Indonesia Area PEMDA Tangerang Selatan</p>
+        </div>
+
+        <div class="nav-category">Panduan Aplikasi EA</div>
+        <ul class="nav-list">
+            <li><a class="nav-item active" onclick="showSection('ea-guide')"><span class="icon">🚀</span> Panduan Enterprise Architect</a></li>
+        </ul>
+
+        <div class="nav-category">1. Use Case Diagram</div>
+        <ul class="nav-list">
+            <li><a class="nav-item" onclick="showSection('uc-utama')"><span class="icon">🎯</span> Use Case Diagram Utama</a></li>
+            <li><a class="nav-item" onclick="showSection('uc-rincian')"><span class="icon">🔍</span> Rincian Input Penilaian</a></li>
+        </ul>
+
+        <div class="nav-category">2. Activity Diagram (13 Use Case)</div>
+        <ul class="nav-list">
+            <li><a class="nav-item" onclick="showSection('act-login')"><span class="icon">⚡</span> 1. Login</a></li>
+            <li><a class="nav-item" onclick="showSection('act-pengguna')"><span class="icon">⚡</span> 2. Kelola Data Pengguna</a></li>
+            <li><a class="nav-item" onclick="showSection('act-karyawan')"><span class="icon">⚡</span> 3. Kelola Data Karyawan</a></li>
+            <li><a class="nav-item" onclick="showSection('act-master')"><span class="icon">⚡</span> 4. Kelola Data Master</a></li>
+            <li><a class="nav-item" onclick="showSection('act-skala')"><span class="icon">⚡</span> 5. Kelola Skala & Bobot</a></li>
+            <li><a class="nav-item" onclick="showSection('act-periode')"><span class="icon">⚡</span> 6. Kelola Periode Penilaian</a></li>
+            <li><a class="nav-item" onclick="showSection('act-penilaian')"><span class="icon">⚡</span> 7. Input Penilaian Kinerja</a></li>
+            <li><a class="nav-item" onclick="showSection('act-hitung')"><span class="icon">⚡</span> 8. Hitung Nilai Otomatis</a></li>
+            <li><a class="nav-item" onclick="showSection('act-final')"><span class="icon">⚡</span> 9. Finalisasi Penilaian</a></li>
+            <li><a class="nav-item" onclick="showSection('act-rekap')"><span class="icon">⚡</span> 10. Lihat Rekap & Laporan</a></li>
+            <li><a class="nav-item" onclick="showSection('act-cetak')"><span class="icon">⚡</span> 11. Cetak / Ekspor Laporan</a></li>
+            <li><a class="nav-item" onclick="showSection('act-hasil')"><span class="icon">⚡</span> 12. Lihat Hasil Penilaian</a></li>
+            <li><a class="nav-item" onclick="showSection('act-feedback')"><span class="icon">⚡</span> 13. Beri Tanggapan (Feedback)</a></li>
+        </ul>
+
+        <div class="nav-category">3. Struktur & Database</div>
+        <ul class="nav-list">
+            <li><a class="nav-item" onclick="showSection('class-diag')"><span class="icon">🏛️</span> Class Diagram (14 Kelas)</a></li>
+            <li><a class="nav-item" onclick="showSection('erd-diag')"><span class="icon">🗄️</span> ERD Database (14 Entitas)</a></li>
+        </ul>
+
+        <div class="nav-category">4. Sequence Diagram</div>
+        <ul class="nav-list">
+            <li><a class="nav-item" onclick="showSection('seq-login')"><span class="icon">🔄</span> Sequence: Login</a></li>
+            <li><a class="nav-item" onclick="showSection('seq-karyawan')"><span class="icon">🔄</span> Sequence: Kelola Karyawan</a></li>
+            <li><a class="nav-item" onclick="showSection('seq-penilaian')"><span class="icon">🔄</span> Sequence: Input Penilaian</a></li>
+            <li><a class="nav-item" onclick="showSection('seq-final')"><span class="icon">🔄</span> Sequence: Finalisasi Penilaian</a></li>
+            <li><a class="nav-item" onclick="showSection('seq-feedback')"><span class="icon">🔄</span> Sequence: Hasil & Tanggapan</a></li>
+            <li><a class="nav-item" onclick="showSection('seq-laporan')"><span class="icon">🔄</span> Sequence: Rekap & Laporan</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="topbar">
+            <h2 id="topbar-title">Panduan Import ke Enterprise Architect</h2>
+            <div class="topbar-actions">
+                <a href="enterprise_architect_model.xmi" download class="btn btn-primary">📥 Download XMI (Model EA)</a>
+                <a href="schema_erd_enterprise_architect.sql" download class="btn btn-outline">💾 Download DDL SQL</a>
+            </div>
+        </div>
+
+        <div class="content-container">
+
+            <!-- 0. PANDUAN ENTERPRISE ARCHITECT -->
+            <div id="ea-guide" class="section-view active">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Cara Menggunakan & Mengedit di Sparx Enterprise Architect</span>
+                    </div>
+                    <div class="card-desc">
+                        Seluruh rancangan telah dikonfigurasi agar Anda dapat langsung membukanya, menempelkan (*paste*), atau mengeditnya secara visual di aplikasi <strong>Enterprise Architect (EA)</strong>. Berikut adalah 3 cara termudah:
+                    </div>
+
+                    <div class="guide-box">
+                        <h4>Metode 1: Import File XMI (Otomatis Membuka Semua Paket, Aktor, Kelas & Diagram)</h4>
+                        <ol>
+                            <li>Buka aplikasi <strong>Enterprise Architect</strong> dan buat Project baru (misal: <code>Penilaian_ISS.qea</code> atau <code>.eapx</code>).</li>
+                            <li>Pada panel <strong>Project Browser</strong>, klik kanan pada <code>Model</code> atau <code>Package Root</code>.</li>
+                            <li>Pilih menu <strong>Import/Export</strong> &rarr; <strong>Import Package from XMI File...</strong> (atau tekan shortcut <strong>Ctrl + Alt + I</strong>).</li>
+                            <li>Klik tombol <strong>Browse</strong> dan pilih file: <br><code>enterprise_architect_model.xmi</code> yang ada di folder projek ini.</li>
+                            <li>Klik <strong>Import</strong>. Seluruh use case, aktor, 14 kelas (dengan atribut & method), sequence lifelines, dan entitas ERD akan langsung muncul di Project Browser EA dan siap di-drag & drop ke diagram!</li>
+                        </ol>
+                    </div>
+
+                    <div class="guide-box" style="background:#eff6ff; border-color:#bfdbfe;">
+                        <h4 style="color:#1d4ed8;">Metode 2: Import Skema Basis Data DDL SQL (Otomatis Menghasilkan ERD Lengkap di EA)</h4>
+                        <ol style="color:#1e40af;">
+                            <li>Di Enterprise Architect, klik ribbon tab <strong>Develop</strong> &rarr; pilih <strong>Data Modeling</strong> &rarr; klik <strong>Import DB Schema from SQL DDL</strong>.</li>
+                            <li>Pilih target Database Type: <strong>MySQL</strong>.</li>
+                            <li>Pilih file: <code>schema_erd_enterprise_architect.sql</code>.</li>
+                            <li>Centang <strong>Prompt on duplicate table</strong> dan klik <strong>Import</strong>.</li>
+                            <li>EA akan membuat seluruh tabel, tipe data kolom, Primary Key, dan Foreign Key secara otomatis!</li>
+                        </ol>
+                    </div>
+
+                    <div class="guide-box" style="background:#fefce8; border-color:#fef08a;">
+                        <h4 style="color:#a16207;">Metode 3: Menggunakan Kode PlantUML (Copy-Paste Langsung)</h4>
+                        <ol style="color:#854d0e;">
+                            <li>Gunakan kode PlantUML di setiap menu di samping untuk di-copy ke EA (jika menggunakan PlantUML Extension di EA) atau alat diagram lain.</li>
+                            <li>Semua file <code>.puml</code> juga telah tersimpan secara rapi di folder <code>scratch/dfd-pt-iss/plantuml/</code>.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="card-title">Struktur 3 Aktor Sistem</span>
+                    <table class="spec-table">
+                        <thead>
+                            <tr>
+                                <th>Aktor</th>
+                                <th>Peran Utama</th>
+                                <th>Hak Akses & Batasan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="actor-badge badge-admin">Admin</span></td>
+                                <td>Pengelola Data & Pengaturan Sistem</td>
+                                <td>Kelola pengguna, data karyawan, data master (area, etika, alat, SOP), skala bobot nilai, periode penilaian, serta melihat & mencetak rekapitulasi nilai.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="actor-badge badge-spv">Supervisor (SPV)</span></td>
+                                <td>Penilai Kinerja Karyawan Lapangan</td>
+                                <td>Menginput skor evaluasi (Etika, Alat, SOP), mengisi catatan & rekomendasi atasan, melakukan finalisasi nilai (mengunci penilaian), serta melihat & mencetak rekapitulasi nilai.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="actor-badge badge-karyawan">Karyawan</span></td>
+                                <td>Pihak yang Dinilai (Cleaner Manpower)</td>
+                                <td><strong>Hanya melihat</strong> hasil evaluasi miliknya sendiri yang sudah berstatus <em>Final</em>, dan dapat menuliskan <strong>tanggapan / feedback</strong> atas hasil tersebut.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 1. USE CASE UTAMA -->
+            <div id="uc-utama" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.1 Use Case Diagram Sistem Informasi Penilaian Kinerja Karyawan</span>
+                        <div>
+                            <span class="actor-badge badge-admin">Admin</span>
+                            <span class="actor-badge badge-spv">Supervisor</span>
+                            <span class="actor-badge badge-karyawan">Karyawan</span>
+                        </div>
+                    </div>
+                    <div class="card-desc">
+                        Diagram ini memodelkan interaksi antara 3 aktor (Admin, SPV, Karyawan) dengan 13 use case utama dalam sistem.
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart LR
+    subgraph Aktor["Aktor Sistem"]
+        Admin(["👤 Admin"])
+        SPV(["👤 Supervisor (SPV)"])
+        Karyawan(["👤 Karyawan"])
+    end
+
+    subgraph Sistem["Sistem Informasi Penilaian Kinerja Cleaning Service PT ISS"]
+        UC1(["Login"])
+        UC2(["Kelola Data Pengguna"])
+        UC3(["Kelola Data Karyawan"])
+        UC4(["Kelola Data Master (Area, Etika, Alat, SOP)"])
+        UC5(["Kelola Skala, Bobot, & Kategori Nilai"])
+        UC6(["Kelola Periode Penilaian"])
+        UC7(["Input Penilaian Kinerja"])
+        UC8(["Lihat Rekap & Laporan Penilaian"])
+        UC9(["Cetak / Ekspor Laporan"])
+        UC10(["Lihat Hasil Penilaian"])
+        UC11(["Beri Tanggapan (Feedback)"])
+        UC12(["Hitung Nilai Otomatis"])
+        UC13(["Finalisasi Penilaian"])
+    end
+
+    Admin --> UC1
+    Admin --> UC2
+    Admin --> UC3
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Admin --> UC8
+
+    SPV --> UC1
+    SPV --> UC7
+    SPV --> UC13
+    SPV --> UC8
+
+    Karyawan --> UC1
+    Karyawan --> UC10
+
+    UC7 -.->|&lt;&lt;include&gt;&gt;| UC12
+    UC9 -.->|&lt;&lt;extend&gt;&gt;| UC8
+    UC11 -.->|&lt;&lt;extend&gt;&gt;| UC10
+                        </pre>
+                    </div>
+
+                    <div class="code-container">
+                        <button class="btn-copy" onclick="copyCode('puml-uc1')">Salin PlantUML</button>
+                        <pre id="puml-uc1">File: plantuml/01_use_case_diagram.puml</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. USE CASE RINCIAN -->
+            <div id="uc-rincian" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.2 Rincian Use Case Input Penilaian Kinerja</span>
+                        <span class="actor-badge badge-spv">Supervisor (SPV)</span>
+                    </div>
+                    <div class="card-desc">
+                        Dekomposisi proses Input Penilaian Kinerja yang dilakukan oleh Supervisor meliputi 3 bagian evaluasi (Etika Kerja, Pengetahuan Alat, SOP), catatan tanggapan/rekomendasi atasan, perhitungan nilai otomatis, dan aksi finalisasi.
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart LR
+    SPV(["👤 Supervisor (SPV)"])
+
+    subgraph Rincian["Rincian Use Case Input Penilaian Kinerja"]
+        UC_Input(["Input Penilaian Kinerja"])
+        UC_Etika(["Isi Evaluasi Etika Kerja (10 Aspek)"])
+        UC_Alat(["Isi Evaluasi Pengetahuan Alat Kerja"])
+        UC_SOP(["Isi Evaluasi Penerapan SOP"])
+        UC_Atasan(["Isi Tanggapan & Rekomendasi Atasan"])
+        UC_Hitung(["Hitung Nilai Otomatis"])
+        UC_Final(["Finalisasi Penilaian"])
+    end
+
+    SPV --> UC_Input
+    SPV --> UC_Final
+
+    UC_Input -.->|&lt;&lt;include&gt;&gt;| UC_Etika
+    UC_Input -.->|&lt;&lt;include&gt;&gt;| UC_Alat
+    UC_Input -.->|&lt;&lt;include&gt;&gt;| UC_SOP
+    UC_Input -.->|&lt;&lt;include&gt;&gt;| UC_Atasan
+    UC_Input -.->|&lt;&lt;include&gt;&gt;| UC_Hitung
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. ACTIVITY LOGIN -->
+            <div id="act-login" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.3 Activity Diagram Login</span>
+                        <span class="actor-badge badge-admin">Semua Pengguna</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Pengguna["Pengguna (Admin / SPV / Karyawan)"]
+        A([Mulai]) --> B[Membuka halaman login]
+        B --> C[Mengisi username dan password]
+        C --> D[Menekan tombol Login]
+        I[Melihat dashboard utama sesuai hak akses] --> J([Selesai])
+        K[Melihat pesan kesalahan login] --> L([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        D --> E[Memvalidasi kredensial pengguna]
+        E --> F{Kredensial valid?}
+        F -- Ya --> G[Mengidentifikasi peran & membuat sesi]
+        G --> H[Menampilkan dashboard sesuai peran]
+        H --> I
+        F -- Tidak --> K
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ACTIVITY KELOLA PENGGUNA -->
+            <div id="act-pengguna" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.4 Activity Diagram Kelola Data Pengguna</span>
+                        <span class="actor-badge badge-admin">Admin</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Admin["Admin"]
+        A([Mulai]) --> B[Memilih menu Kelola Data Pengguna]
+        D[Memilih aksi: Tambah, Ubah, Reset Password, atau Nonaktifkan]
+        F[Mengisi atau memperbarui formulir akun pengguna]
+        F --> G[Menekan tombol Simpan]
+        K[Melihat daftar akun pengguna terbaru] --> L([Selesai])
+        M[Melihat pesan kesalahan validasi] --> N([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan tabel daftar akun pengguna]
+        C --> D
+        D --> E[Menampilkan modal formulir kelola akun]
+        E --> F
+        G --> H[Memvalidasi kelengkapan & keunikan username]
+        H --> I{Data valid?}
+        I -- Ya --> J[Menyimpan perubahan data akun ke basis data]
+        J --> O[Menampilkan notifikasi sukses & memuat ulang tabel]
+        O --> K
+        I -- Tidak --> M
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. ACTIVITY KELOLA KARYAWAN -->
+            <div id="act-karyawan" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.5 Activity Diagram Kelola Data Karyawan</span>
+                        <span class="actor-badge badge-admin">Admin</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Admin["Admin"]
+        A([Mulai]) --> B[Memilih menu Kelola Data Karyawan]
+        D[Memilih aksi: Tambah Baru, Ubah Profil/Area, atau Hapus]
+        F[Mengisi form biodata karyawan & memilih area penempatan]
+        F --> G[Menekan tombol Simpan]
+        K[Melihat daftar karyawan terbaru] --> L([Selesai])
+        M[Melihat pesan kesalahan input] --> N([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan tabel data karyawan & area penempatan]
+        C --> D
+        D --> E[Menampilkan formulir isian karyawan & opsi area]
+        E --> F
+        G --> H[Memvalidasi format data & keunikan NIK]
+        H --> I{Data valid?}
+        I -- Ya --> J[Menyimpan data profil karyawan ke database]
+        J --> O[Menampilkan notifikasi sukses & memuat ulang data]
+        O --> K
+        I -- Tidak --> M
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ACTIVITY KELOLA DATA MASTER -->
+            <div id="act-master" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.6 Activity Diagram Kelola Data Master</span>
+                        <span class="actor-badge badge-admin">Admin</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Admin["Admin"]
+        A([Mulai]) --> B[Memilih menu Kelola Data Master]
+        C[Memilih tab kategori: Area / Etika / Alat / SOP]
+        E[Memilih aksi: Tambah Item, Edit, atau Hapus Item]
+        G[Mengisi formulir detail item master]
+        G --> H[Menekan tombol Simpan]
+        L[Melihat daftar data master terbaru] --> M([Selesai])
+        N[Melihat pesan kesalahan validasi] --> P([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C
+        C --> D[Menampilkan daftar item sesuai kategori yang dipilih]
+        D --> E
+        E --> F[Menampilkan modal form isian master item]
+        F --> G
+        H --> I[Memvalidasi format & keunikan data master]
+        I --> J{Data valid?}
+        J -- Ya --> K[Menyimpan perubahan ke tabel master di basis data]
+        K --> Q[Menampilkan notifikasi sukses & me-refresh tabel]
+        Q --> L
+        J -- Tidak --> N
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ACTIVITY KELOLA SKALA & BOBOT -->
+            <div id="act-skala" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.7 Activity Diagram Kelola Skala, Bobot & Kategori Nilai</span>
+                        <span class="actor-badge badge-admin">Admin</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Admin["Admin"]
+        A([Mulai]) --> B[Memilih menu Kelola Skala, Bobot & Kategori]
+        D[Mengubah persentase bobot bagian atau rentang predikat]
+        D --> E[Menekan tombol Simpan Perubahan]
+        I[Melihat konfigurasi baru aktif] --> J([Selesai])
+        K[Melihat peringatan: Total bobot harus 100%] --> L([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan pengaturan bobot saat ini & ambang predikat]
+        C --> D
+        E --> F[Memvalidasi total akumulasi bobot bagian]
+        F --> G{Total bobot = 100%?}
+        G -- Ya --> H[Menyimpan konfigurasi bobot & predikat ke database]
+        H --> M[Menampilkan notifikasi konfigurasi berhasil diperbarui]
+        M --> I
+        G -- Tidak --> K
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. ACTIVITY KELOLA PERIODE -->
+            <div id="act-periode" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.8 Activity Diagram Kelola Periode Penilaian</span>
+                        <span class="actor-badge badge-admin">Admin</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Admin["Admin"]
+        A([Mulai]) --> B[Memilih menu Kelola Periode Penilaian]
+        D[Memilih aksi: Buka Periode Baru, Ubah Jadwal, atau Tutup Periode]
+        F[Mengisi nama periode, batas tanggal, dan status aktif]
+        F --> G[Menekan tombol Simpan]
+        K[Melihat status periode terbaru] --> L([Selesai])
+        M[Melihat pesan kesalahan validasi periode] --> N([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan tabel histori & status periode penilaian]
+        C --> D
+        D --> E[Menampilkan modal formulir pengaturan periode]
+        E --> F
+        G --> H[Memvalidasi aturan periode aktif tunggal & rentang tanggal]
+        H --> I{Validasi terpenuhi?}
+        I -- Ya --> J[Menyimpan status periode ke basis data]
+        J --> O[Menampilkan notifikasi sukses & refresh data]
+        O --> K
+        I -- Tidak --> M
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. ACTIVITY INPUT PENILAIAN -->
+            <div id="act-penilaian" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.9 Activity Diagram Input Penilaian Kinerja</span>
+                        <span class="actor-badge badge-spv">Supervisor (SPV)</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph SPV["Supervisor (SPV)"]
+        A([Mulai]) --> B[Memilih menu Input Penilaian Kinerja]
+        D[Memilih karyawan yang akan dievaluasi]
+        F[Mengisi skor instrumen Etika Kerja - 10 Aspek]
+        F --> G[Mengisi skor instrumen Pengetahuan Alat Kerja]
+        G --> H[Mengisi skor instrumen Penerapan SOP]
+        H --> I[Mengisi catatan tanggapan & rekomendasi atasan]
+        I --> J[Menekan tombol Simpan Draft Penilaian]
+        P[Melihat formulir tersimpan berstatus DRAFT] --> Q([Selesai])
+        R[Melihat peringatan: Seluruh butir kriteria wajib diisi] --> S([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan daftar karyawan binaan & periode aktif]
+        C --> D
+        D --> E[Menampilkan formulir instrumen evaluasi 3 bagian]
+        E --> F
+        J --> K[Memeriksa kelengkapan seluruh butir evaluasi]
+        K --> L{Semua butir terisi?}
+        L -- Ya --> M["Memanggil Use Case <<include>>: Hitung Nilai Otomatis"]
+        M --> N[Menyimpan data penilaian ke database status DRAFT]
+        N --> O[Menampilkan notifikasi draft berhasil disimpan]
+        O --> P
+        L -- Tidak --> R
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. ACTIVITY HITUNG NILAI OTOMATIS -->
+            <div id="act-hitung" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.10 Activity Diagram Hitung Nilai Otomatis (Include)</span>
+                        <span class="actor-badge badge-karyawan">Sistem (Modul Perhitungan)</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Sistem["Sistem (Modul Perhitungan Penilaian)"]
+        A([Mulai: Dipanggil oleh Form Penilaian]) --> B[Menerima input skor Etika, Alat, dan SOP]
+        B --> C[Mengambil parameter bobot dari tabel konfigurasi]
+        C --> D[Menghitung rata-rata skor per bagian]
+        D --> E["Menghitung Nilai Akhir Tertimbang:
+(Etika x 30%) + (Alat x 35%) + (SOP x 35%)"]
+        E --> F[Mencocokkan Nilai Akhir ke tabel ambang predikat kualitatif]
+        F --> G[Menetapkan kategori nilai: Sangat Baik / Baik / Cukup / Kurang]
+        G --> H[Menyimpan hasil kalkulasi ke record penilaian]
+        H --> I[Mengembalikan nilai kalkulasi ke antarmuka formulir]
+        I --> J([Selesai])
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. ACTIVITY FINALISASI PENILAIAN -->
+            <div id="act-final" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.11 Activity Diagram Finalisasi Penilaian</span>
+                        <span class="actor-badge badge-spv">Supervisor (SPV)</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph SPV["Supervisor (SPV)"]
+        A([Mulai]) --> B[Membuka daftar lembar penilaian berstatus DRAFT]
+        B --> C[Memeriksa rangkuman nilai & rekomendasi atasan]
+        C --> D[Menekan tombol Finalisasi Penilaian]
+        F[Mengonfirmasi dialog: Ya, Finalisasi]
+        K[Melihat status penilaian telah resmi berstatus FINAL] --> L([Selesai])
+        M[Melihat pesan penolakan finalisasi] --> N([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        D --> E[Menampilkan dialog konfirmasi penguncian nilai]
+        E --> F
+        F --> G[Memvalidasi kelengkapan data & rekomendasi atasan]
+        G --> H{Data lengkap & valid?}
+        H -- Ya --> I[Mengubah status record dari DRAFT menjadi FINAL]
+        I --> J[Mengunci formulir penilaian & timestamp penguncian]
+        J --> O[Mengaktifkan izin publikasi nilai ke akun karyawan]
+        O --> P[Menampilkan notifikasi sukses finalisasi]
+        P --> K
+        H -- Tidak --> M
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. ACTIVITY LIHAT REKAP & LAPORAN -->
+            <div id="act-rekap" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.12 Activity Diagram Lihat Rekap dan Laporan Penilaian</span>
+                        <span class="actor-badge badge-admin">Admin / SPV</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Pengguna["Admin / Supervisor (SPV)"]
+        A([Mulai]) --> B[Memilih menu Rekap dan Laporan Penilaian]
+        D[Memilih filter: Periode, Gedung/Area, Kategori Nilai]
+        D --> E[Menekan tombol Tampilkan Rekap]
+        I[Melihat tabel rekap nilai & diagram statistik performa] --> J([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan antarmuka formulir filter penyaringan]
+        C --> D
+        E --> F[Melakukan kueri data penilaian berstatus FINAL sesuai filter]
+        F --> G[Menghitung agregasi rata-rata & sebaran kategori]
+        G --> H[Menampilkan tabel rekapitulasi nilai dan grafik ringkasan]
+        H --> I
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. ACTIVITY CETAK / EKSPOR LAPORAN -->
+            <div id="act-cetak" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.13 Activity Diagram Cetak / Ekspor Laporan (Extend)</span>
+                        <span class="actor-badge badge-admin">Admin / SPV</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Pengguna["Admin / Supervisor (SPV)"]
+        A([Mulai: Berada di Halaman Rekap Penilaian]) --> B[Menekan tombol Cetak / Ekspor Laporan]
+        D[Memilih format dokumen yang diinginkan: PDF atau Excel]
+        D --> E[Menekan tombol Unduh Dokumen]
+        K[Menerima & menyimpan berkas laporan di perangkat] --> L([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan modal pilihan format dokumen]
+        C --> D
+        E --> F{Format dipilih?}
+        F -- PDF --> G[Menyusun template laporan ber-kop resmi ISS & tanda tangan]
+        G --> I[Mengonversi dan merender dokumen ke format PDF]
+        F -- Excel --> H[Menyusun lembar kerja spreadsheet data rekapitulasi]
+        H --> I
+        I --> J[Mengirimkan stream file laporan ke browser pengguna]
+        J --> K
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. ACTIVITY LIHAT HASIL PENILAIAN -->
+            <div id="act-hasil" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.14 Activity Diagram Lihat Hasil Penilaian</span>
+                        <span class="actor-badge badge-karyawan">Karyawan</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Karyawan["Karyawan (Cleaning Service)"]
+        A([Mulai]) --> B[Memilih menu Hasil Penilaian Saya]
+        D[Memilih periode evaluasi yang ingin diperiksa]
+        F[Membaca scorecard nilai & rekomendasi pengembangan dari atasan] --> G([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Mengambil histori periode penilaian berstatus FINAL bagi karyawan login]
+        C --> D
+        D --> E[Mengambil rincian skor 3 bagian, nilai akhir, predikat & catatan SPV]
+        E --> F
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. ACTIVITY BERI TANGGAPAN (FEEDBACK) -->
+            <div id="act-feedback" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.15 Activity Diagram Beri Tanggapan (Feedback) (Extend)</span>
+                        <span class="actor-badge badge-karyawan">Karyawan</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+flowchart TD
+    subgraph Karyawan["Karyawan (Cleaning Service)"]
+        A([Mulai: Berada di Lembar Hasil Penilaian]) --> B[Menekan tombol Beri Tanggapan / Feedback]
+        D[Menulis teks respon / klarifikasi hasil kerja]
+        D --> E[Menekan tombol Kirim Tanggapan]
+        K[Melihat status tanggapan telah berhasil disimpan & terverifikasi] --> L([Selesai])
+        M[Melihat pesan peringatan: Kolom tanggapan tidak boleh kosong] --> N([Selesai])
+    end
+
+    subgraph Sistem["Sistem"]
+        B --> C[Menampilkan formulir modal isian komentar tanggapan karyawan]
+        C --> D
+        E --> F[Memvalidasi isi teks tanggapan]
+        F --> G{Teks tanggapan valid?}
+        G -- Ya --> H[Menyimpan tanggapan & waktu respon ke record penilaian di database]
+        H --> I[Mengunci kolom feedback agar tidak dapat dimanipulasi]
+        I --> J[Menampilkan notifikasi sukses & memperbarui tampilan lembar nilai]
+        J --> K
+        G -- Tidak --> M
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. CLASS DIAGRAM -->
+            <div id="class-diag" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.8 Class Diagram Lengkap (14 Kelas)</span>
+                    </div>
+                    <div class="card-desc">
+                        Memodelkan struktur objek berorientasi objek (OOP) lengkap dengan atribut, tipe data, method/operasi, spesifikasi inheritance (Pengguna &rarr; Admin, SPV, Karyawan), agregasi/komposisi (Penilaian &rarr; DetailEtika, DetailAlat, DetailSOP, TanggapanKaryawan), serta relasi asosiasi.
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+classDiagram
+    class Pengguna {
+        -int idPengguna
+        -String username
+        -String password
+        -String namaLengkap
+        -String role
+        -String status
+        +login() boolean
+        +logout() void
+        +ubahPassword() boolean
+    }
+
+    class Admin {
+        +kelolaPengguna() void
+        +kelolaKaryawan() void
+        +kelolaDataMaster() void
+        +kelolaSkalaBobotKategori() void
+        +kelolaPeriode() void
+        +lihatRekap() List
+        +cetakLaporan() File
+    }
+
+    class Supervisor {
+        +inputPenilaian() boolean
+        +finalisasiPenilaian() boolean
+        +lihatRekap() List
+        +cetakLaporan() File
+    }
+
+    class Karyawan {
+        -int idKaryawan
+        -String nomorEmployee
+        -String jabatan
+        -Date tanggalBergabung
+        -String statusKerja
+        +lihatHasilPenilaian() Penilaian
+        +beriTanggapan() boolean
+    }
+
+    Pengguna <|-- Admin
+    Pengguna <|-- Supervisor
+    Pengguna <|-- Karyawan
+
+    class Area {
+        -int idArea
+        -String namaArea
+        -String lokasi
+        +simpan() boolean
+        +ubah() boolean
+        +hapus() boolean
+    }
+
+    class Periode {
+        -int idPeriode
+        -String namaPeriode
+        -Date tanggalMulai
+        -Date tanggalSelesai
+        -String status
+        +aktifkan() boolean
+        +tutup() boolean
+    }
+
+    class KategoriNilai {
+        -int idKategori
+        -String namaKategori
+        -float nilaiMin
+        -float nilaiMaks
+        -String tindakLanjut
+        +simpan() boolean
+        +ubah() boolean
+    }
+
+    class Penilaian {
+        -int idPenilaian
+        -Date tanggalPenilaian
+        -float nilaiEtika
+        -float nilaiAlat
+        -float nilaiSop
+        -float nilaiAkhir
+        -String tanggapanAtasan
+        -String rekomendasiAtasan
+        -String status
+        +hitungNilai() float
+        +tentukanKategori() KategoriNilai
+        +simpanDraft() boolean
+        +finalisasi() boolean
+    }
+
+    class DetailEtika {
+        -int idDetailEtika
+    }
+
+    class DetailAlat {
+        -int idDetailAlat
+        -String komponen
+        -String keterangan
+    }
+
+    class DetailSOP {
+        -int idDetailSop
+        -String keterangan
+    }
+
+    class TanggapanKaryawan {
+        -int idTanggapan
+        -String isiTanggapan
+        -Date tanggalTanggapan
+        +simpan() boolean
+    }
+
+    Area "1" -- "0..*" Karyawan : ditempatkan di
+    Supervisor "1" -- "0..*" Penilaian : menilai
+    Karyawan "1" -- "0..*" Penilaian : dinilai
+    Periode "1" -- "0..*" Penilaian : periode
+    Penilaian "1" *-- "1..*" DetailEtika
+    Penilaian "1" *-- "1..*" DetailAlat
+    Penilaian "1" *-- "1..*" DetailSOP
+    Penilaian "1" *-- "0..1" TanggapanKaryawan
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. ERD DIAGRAM -->
+            <div id="erd-diag" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.9 Entity Relationship Diagram (ERD) - Notasi Crow's Foot</span>
+                    </div>
+                    <div class="card-desc">
+                        Struktur database relasional 14 tabel yang ternormalisasi (3NF). Lengkap dengan tipe data MySQL, Primary Key (PK), dan Foreign Key (FK).
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+erDiagram
+    pengguna ||--o| karyawan : "memiliki akun"
+    area ||--o{ karyawan : "menempatkan"
+    karyawan ||--o{ penilaian : "dinilai"
+    pengguna ||--o{ penilaian : "menilai (penilai)"
+    periode ||--o{ penilaian : "periode"
+    kategori_nilai ||--o{ penilaian : "klasifikasi"
+
+    penilaian ||--|{ detail_etika : "memiliki rincian"
+    penilaian ||--|{ detail_alat : "memiliki rincian"
+    penilaian ||--|{ detail_sop : "memiliki rincian"
+    penilaian ||--o| tanggapan_karyawan : "memiliki tanggapan"
+
+    aspek_etika ||--o{ detail_etika : "aspek"
+    skala_nilai ||--o{ detail_etika : "skor skala"
+    alat_kerja ||--o{ detail_alat : "alat"
+    skala_nilai ||--o{ detail_alat : "skor skala"
+    sop ||--o{ detail_sop : "sop"
+    skala_nilai ||--o{ detail_sop : "skor skala"
+
+    pengguna {
+        int id_pengguna PK
+        string username
+        string password
+        string nama_lengkap
+        string role
+        string status
+    }
+
+    karyawan {
+        int id_karyawan PK
+        int id_pengguna FK
+        int id_area FK
+        string nomor_employee
+        string jabatan
+        date tanggal_bergabung
+        string status_kerja
+    }
+
+    penilaian {
+        int id_penilaian PK
+        int id_karyawan FK
+        int id_periode FK
+        int id_penilai FK
+        int id_kategori FK
+        date tanggal_penilaian
+        decimal nilai_akhir
+        text tanggapan_atasan
+        text rekomendasi_atasan
+        string status
+    }
+
+    tanggapan_karyawan {
+        int id_tanggapan PK
+        int id_penilaian FK
+        text isi_tanggapan
+        datetime tanggal_tanggapan
+    }
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. SEQUENCE LOGIN -->
+            <div id="seq-login" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.10 Sequence Diagram Login</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Pengguna as Pengguna
+    participant View as Halaman (View)
+    participant Ctrl as Controller
+    participant Model as Model
+    participant DB as Database (MySQL)
+
+    Pengguna->>View: Mengisi username dan password
+    View->>Ctrl: login(username, password)
+    Ctrl->>Model: cariPengguna(username)
+    Model->>DB: SELECT * FROM pengguna WHERE username = ?
+    DB-->>Model: data pengguna
+    Model-->>Ctrl: data pengguna
+    Note over Ctrl: Verifikasi password hash
+
+    alt Password Cocok
+        Ctrl-->>View: redirect dashboard sesuai role
+        View-->>Pengguna: Menampilkan dashboard
+    else Password Salah
+        Ctrl-->>View: pesan kesalahan
+        View-->>Pengguna: Menampilkan pesan login gagal
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. SEQUENCE KELOLA KARYAWAN -->
+            <div id="seq-karyawan" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.11 Sequence Diagram Kelola Data Karyawan</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Admin as Admin
+    participant View as Halaman (View)
+    participant Ctrl as Controller
+    participant Model as Model
+    participant DB as Database (MySQL)
+
+    Admin->>View: Memilih menu Data Karyawan
+    View->>Ctrl: index()
+    Ctrl->>Model: ambilSemuaKaryawan()
+    Model->>DB: SELECT karyawan JOIN pengguna, area
+    DB-->>Model: data karyawan
+    Model-->>Ctrl: data karyawan
+    Ctrl-->>View: daftar karyawan
+    View-->>Admin: Menampilkan daftar karyawan
+
+    Admin->>View: Mengisi form lalu Simpan
+    View->>Ctrl: simpan(data)
+    Note over Ctrl: Validasi data
+
+    alt Data Valid
+        Ctrl->>Model: buatAkun() & simpanKaryawan()
+        Model->>DB: INSERT pengguna, INSERT karyawan
+        DB-->>Model: berhasil
+        Model-->>Ctrl: berhasil
+        Ctrl-->>View: pesan berhasil
+        View-->>Admin: Menampilkan daftar terbaru
+    else Data Tidak Valid
+        Ctrl-->>View: pesan kesalahan validasi
+        View-->>Admin: Menampilkan pesan kesalahan
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. SEQUENCE INPUT PENILAIAN -->
+            <div id="seq-penilaian" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.12 Sequence Diagram Input Penilaian Kinerja</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor SPV as Supervisor (SPV)
+    participant View as Halaman (View)
+    participant Ctrl as Controller
+    participant Model as Model
+    participant DB as Database (MySQL)
+
+    SPV->>View: Memilih karyawan dan periode
+    View->>Ctrl: formPenilaian(idKaryawan, idPeriode)
+    Ctrl->>Model: ambilDataMaster()
+    Model->>DB: SELECT aspek_etika, alat_kerja, sop, skala_nilai
+    DB-->>Model: data master
+    Model-->>Ctrl: data master
+    Ctrl-->>View: formulir penilaian
+    View-->>SPV: Menampilkan formulir 3 bagian
+
+    SPV->>View: Mengisi penilaian lalu Simpan
+    View->>Ctrl: simpan(data)
+    Note over Ctrl: Validasi kelengkapan isian
+
+    alt Isian Lengkap
+        Note over Ctrl: hitungNilai(), tentukanKategori()
+        Ctrl->>Model: simpanDraft(penilaian & detail)
+        Model->>DB: INSERT penilaian, detail_etika, detail_alat, detail_sop
+        DB-->>Model: berhasil
+        Model-->>Ctrl: nilai akhir & kategori
+        Ctrl-->>View: hasil penilaian (status draft)
+        View-->>SPV: Menampilkan nilai & kategori (draft)
+    else Isian Belum Lengkap
+        Ctrl-->>View: pesan isian belum lengkap
+        View-->>SPV: Menampilkan pesan kesalahan
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. SEQUENCE FINALISASI -->
+            <div id="seq-final" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.13 Sequence Diagram Finalisasi Penilaian</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor SPV as Supervisor (SPV)
+    participant View as Halaman (View)
+    participant Ctrl as Controller
+    participant Model as Model
+    participant DB as Database (MySQL)
+
+    SPV->>View: Menekan tombol Finalisasi
+    View->>Ctrl: finalisasi(idPenilaian)
+    Ctrl->>Model: ubahStatus("final")
+    Model->>DB: UPDATE penilaian SET status = 'final' WHERE id_penilaian = ?
+    DB-->>Model: berhasil
+    Model-->>Ctrl: berhasil
+    Ctrl-->>View: status final
+    View-->>SPV: Menampilkan penilaian terkunci (final)
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14. SEQUENCE LIHAT HASIL & TANGGAPAN -->
+            <div id="seq-feedback" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.14 Sequence Diagram Lihat Hasil dan Beri Tanggapan</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor Karyawan as Karyawan
+    participant View as Halaman (View)
+    participant Ctrl as Controller
+    participant Model as Model
+    participant DB as Database (MySQL)
+
+    Karyawan->>View: Memilih periode penilaian
+    View->>Ctrl: lihatHasil(idPenilaian)
+    Ctrl->>Model: ambilHasil(idPenilaian, idKaryawan)
+    Model->>DB: SELECT * FROM penilaian WHERE id_karyawan = ? AND status = 'final'
+    DB-->>Model: data penilaian final
+    Model-->>Ctrl: data penilaian final
+    Ctrl-->>View: halaman hasil
+    View-->>Karyawan: Menampilkan rincian nilai & saran atasan
+
+    Karyawan->>View: Menulis tanggapan lalu Kirim
+    View->>Ctrl: simpanTanggapan(idPenilaian, isi)
+    Note over Ctrl: Validasi isi tanggapan
+
+    alt Tanggapan Terisi
+        Ctrl->>Model: simpan(tanggapan)
+        Model->>DB: INSERT INTO tanggapan_karyawan (id_penilaian, isi_tanggapan)
+        DB-->>Model: berhasil
+        Model-->>Ctrl: berhasil
+        Ctrl-->>View: pesan berhasil
+        View-->>Karyawan: Menampilkan tanggapan tersimpan
+    else Tanggapan Kosong
+        Ctrl-->>View: pesan kesalahan
+        View-->>Karyawan: Menampilkan pesan kesalahan
+    end
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 15. SEQUENCE REKAP & LAPORAN -->
+            <div id="seq-laporan" class="section-view">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Gambar 3.15 Sequence Diagram Rekap dan Cetak Laporan</span>
+                    </div>
+                    <div class="diagram-container">
+                        <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    actor User as Admin / SPV
+    participant View as Halaman (View)
+    participant Ctrl as Controller
+    participant Model as Model
+    participant DB as Database (MySQL)
+
+    User->>View: Memilih filter (periode, area, kategori)
+    View->>Ctrl: rekap(filter)
+    Ctrl->>Model: ambilRekap(filter)
+    Model->>DB: SELECT penilaian JOIN karyawan, periode, kategori_nilai
+    DB-->>Model: data rekap
+    Model-->>Ctrl: data rekap
+    Ctrl-->>View: halaman rekap
+    View-->>User: Menampilkan rekap nilai
+
+    User->>View: Memilih format lalu Cetak / Ekspor
+    View->>Ctrl: ekspor(format, filter)
+    Note over Ctrl: Membuat berkas PDF / Excel
+    Ctrl-->>View: berkas laporan
+    View-->>User: Mengunduh berkas laporan
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#dbeafe',
+                primaryBorderColor: '#2563eb',
+                primaryTextColor: '#1e3a8a',
+                lineColor: '#475569',
+                secondaryColor: '#f1f5f9',
+                tertiaryColor: '#ffffff'
+            }
+        });
+
+        const titles = {
+            'ea-guide': 'Panduan Import ke Enterprise Architect',
+            'uc-utama': 'Gambar 3.1 Use Case Diagram Utama',
+            'uc-rincian': 'Gambar 3.2 Rincian Use Case Input Penilaian Kinerja',
+            'act-login': 'Gambar 3.3 Activity Diagram Login',
+            'act-pengguna': 'Gambar 3.4 Activity Diagram Kelola Data Pengguna',
+            'act-karyawan': 'Gambar 3.5 Activity Diagram Kelola Data Karyawan',
+            'act-master': 'Gambar 3.6 Activity Diagram Kelola Data Master',
+            'act-skala': 'Gambar 3.7 Activity Diagram Kelola Skala, Bobot & Kategori Nilai',
+            'act-periode': 'Gambar 3.8 Activity Diagram Kelola Periode Penilaian',
+            'act-penilaian': 'Gambar 3.9 Activity Diagram Input Penilaian Kinerja',
+            'act-hitung': 'Gambar 3.10 Activity Diagram Hitung Nilai Otomatis',
+            'act-final': 'Gambar 3.11 Activity Diagram Finalisasi Penilaian',
+            'act-rekap': 'Gambar 3.12 Activity Diagram Lihat Rekap dan Laporan Penilaian',
+            'act-cetak': 'Gambar 3.13 Activity Diagram Cetak / Ekspor Laporan',
+            'act-hasil': 'Gambar 3.14 Activity Diagram Lihat Hasil Penilaian',
+            'act-feedback': 'Gambar 3.15 Activity Diagram Beri Tanggapan (Feedback)',
+            'class-diag': 'Gambar 3.16 Class Diagram Sistem',
+            'erd-diag': 'Gambar 3.17 Entity Relationship Diagram (ERD)',
+            'seq-login': 'Gambar 3.18 Sequence Diagram Login',
+            'seq-karyawan': 'Gambar 3.19 Sequence Diagram Kelola Data Karyawan',
+            'seq-penilaian': 'Gambar 3.20 Sequence Diagram Input Penilaian Kinerja',
+            'seq-final': 'Gambar 3.21 Sequence Diagram Finalisasi Penilaian',
+            'seq-feedback': 'Gambar 3.22 Sequence Diagram Lihat Hasil & Beri Tanggapan',
+            'seq-laporan': 'Gambar 3.23 Sequence Diagram Rekap dan Cetak Laporan'
+        };
+
+        function showSection(id) {
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            const targetSection = document.getElementById(id);
+            if(targetSection) targetSection.classList.add('active');
+
+            const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(a => a.getAttribute('onclick')?.includes(id));
+            if(activeNav) activeNav.classList.add('active');
+
+            if(titles[id]) {
+                document.getElementById('topbar-title').innerText = titles[id];
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function copyCode(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Kode berhasil disalin ke clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

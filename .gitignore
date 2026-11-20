@@ -1,0 +1,8 @@
+# Dependency and temp directories
+node_modules/
+temp_*.js
+*.log
+
+# Antigravity brain / scratch
+.system_generated/
+scratch/

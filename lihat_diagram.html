@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram DFD Evaluasi Karyawan PT ISS - PEMDA Tangsel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f4f6f9;
+      color: #333;
+      padding: 30px 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    h1 {
+      font-size: 26px;
+      color: #0b3954;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      font-size: 16px;
+      color: #555;
+    }
+    .badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 14px;
+      background: #e1f0fa;
+      color: #086788;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 35px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #edf2f7;
+      padding-bottom: 12px;
+    }
+    .card-title {
+      font-size: 20px;
+      color: #1a202c;
+    }
+    .card-desc {
+      color: #4a5568;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .image-wrapper {
+      text-align: center;
+      background: #fafafa;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .image-wrapper img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .image-wrapper img:hover {
+      transform: scale(1.01);
+    }
+    .hint {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #718096;
+      font-style: italic;
+    }
+    footer {
+      text-align: center;
+      color: #718096;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Data Flow Diagram (DFD) Sistem Evaluasi Kinerja Karyawan</h1>
+      <p class="subtitle">Studi Kasus: PT ISS Indonesia — Area Penempatan PEMDA Tangerang Selatan (Cleaning Service)</p>
+      <div class="badge">Bahan Seminar Proposal (Sempro) Semester 7</div>
+    </header>
+
+    <!-- LEVEL 0 -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">1. Diagram Konteks (DFD Level 0)</h2>
+      </div>
+      <p class="card-desc">
+        Menggambarkan sistem secara global dan aliran data keluar-masuk antara 3 entitas eksternal: <b>Admin</b>, <b>Supervisor (SPV)</b>, dan <b>Karyawan Manpower Cleaning Service</b>.
+      </p>
+      <div class="image-wrapper">
+        <img src="DFD_Level_0_Konteks.jpg" alt="Diagram Konteks Level 0">
+        <div class="hint">💡 Klik kanan pada gambar lalu pilih "Copy Image" untuk langsung menempelkannya ke Microsoft Word atau PowerPoint.</div>
+      </div>
+    </div>
+
+    <!-- LEVEL 1 -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">2. DFD Level 1 (Dekomposisi Proses Utama)</h2>
+      </div>
+      <p class="card-desc">
+        Menguraikan sistem menjadi 5 proses utama (1.0 Login, 2.0 Kelola Data Master, 3.0 Penilaian Kinerja, 4.0 Akses Hasil & Tanggapan, 5.0 Laporan Evaluasi) serta 5 Data Store basis data (D1 s/d D5).
+      </p>
+      <div class="image-wrapper">
+        <img src="DFD_Level_1.jpg" alt="DFD Level 1">
+        <div class="hint">💡 Gambar ini menunjukkan aliran data lengkap antara tabel database, proses, dan setiap aktor.</div>
+      </div>
+    </div>
+
+    <!-- LEVEL 2 -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">3. DFD Level 2 (Rincian Proses 3.0 - Penilaian Kinerja Karyawan)</h2>
+      </div>
+      <p class="card-desc">
+        Merinci alur kerja Supervisor di lapangan mulai dari pemilihan manpower shift (3.1), penilaian indikator SOP Cleaning/Grooming/Absensi (3.2), hingga kalkulasi skor grade otomatis (3.3).
+      </p>
+      <div class="image-wrapper">
+        <img src="DFD_Level_2.jpg" alt="DFD Level 2">
+        <div class="hint">💡 Sangat cocok dijadikan rincian teknis pada Bab 3 Metodologi / Perancangan Sistem pada proposal skripsi.</div>
+      </div>
+    </div>
+
+    <footer>
+      Dibuat untuk persiapan Seminar Proposal Tugas Akhir &bull; PT ISS Indonesia Area PEMDA Tangerang Selatan
+    </footer>
+  </div>
+</body>
+</html>

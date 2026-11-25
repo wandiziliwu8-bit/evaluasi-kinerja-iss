@@ -2400,9 +2400,20 @@ function handleLogin(e) {
     if (!k && uKaryawan && uKaryawan.karyawanId) {
       k = db.karyawan.find(x => x.id === uKaryawan.karyawanId);
     }
+    if (k && !uKaryawan) {
+      uKaryawan = db.users.find(x => x.role === 'karyawan' && (x.nik === k.nik || x.karyawanId === k.id || (x.nama && x.nama.toLowerCase() === k.nama.toLowerCase())));
+    }
     if (k || uKaryawan) {
       const targetK = k || {};
-      const activePassword = (k && k.password) || (uKaryawan && uKaryawan.password) || targetK.nik || (uKaryawan && uKaryawan.nik);
+      // Prioritaskan kata sandi yang telah diubah di db.karyawan atau db.users
+      let activePassword = '';
+      if (k && k.password) {
+        activePassword = k.password;
+      } else if (uKaryawan && uKaryawan.password) {
+        activePassword = uKaryawan.password;
+      } else {
+        activePassword = targetK.nik || (uKaryawan && uKaryawan.nik);
+      }
       matchedUser = {
         id: uKaryawan ? uKaryawan.id : (100 + targetK.id),
         username: targetK.nik || (uKaryawan && uKaryawan.username),
@@ -2427,20 +2438,17 @@ function handleLogin(e) {
     return;
   }
 
-  // Verifikasi Kata Sandi (Awal = NIK masing-masing, atau sandi baru yang telah diubah)
-  // Menerima kata sandi user, NIK, serta sandi master evaluasi: '123' / '123456' / 'admin'
-  const isPassValid = (password === expectedPassword) || 
-                      (matchedUser.password && password === matchedUser.password) ||
-                      (password === '123') || 
-                      (password === '123456') ||
-                      (password === matchedUser.nik) ||
-                      (selectedRole === 'admin' && (password === 'admin' || password === '123'));
+  // Verifikasi Kata Sandi:
+  // HANYA kata sandi aktif/terbaru yang tersimpan di sistem yang sah.
+  // Jika kata sandi telah diubah, maka HANYA kata sandi baru yang dapat digunakan.
+  // Kata sandi lama (maupun NIK lama) TIDAK DAPAT digunakan lagi.
+  const isPassValid = (password === expectedPassword);
 
   if (!isPassValid) {
     if (errorAlert) errorAlert.classList.add('show');
     if (passwordInput) passwordInput.classList.add('is-invalid');
     if (errorDesc) {
-      errorDesc.innerHTML = 'Kata sandi salah untuk <b>' + matchedUser.nama + '</b>.<br><small style="color:var(--text-muted)">Gunakan kata sandi baru Anda atau kata sandi default (NIK: <code>' + matchedUser.nik + '</code>).</small>';
+      errorDesc.innerHTML = 'Kata sandi salah untuk akun <b>' + matchedUser.nama + '</b>.<br><small style="color:var(--text-muted)">Harap gunakan kata sandi baru Anda. Kata sandi lama sudah tidak dapat digunakan.</small>';
     }
     return;
   }
@@ -2813,10 +2821,7 @@ function handleProsesGantiSandi(e) {
   }
 
   // 3. Verifikasi kata sandi saat ini
-  const isOldCorrect = (oldPass === currentSavedPass) || 
-                       (oldPass === user.nik) || 
-                       (oldPass === '123') || 
-                       (user.role === 'admin' && oldPass === 'admin');
+  const isOldCorrect = (oldPass === currentSavedPass);
   if (!isOldCorrect) {
     setAlert('Kata sandi saat ini yang Anda masukkan salah atau tidak cocok!');
     if (oldPassInput) oldPassInput.focus();
@@ -2852,28 +2857,46 @@ function handleProsesGantiSandi(e) {
     return;
   }
 
-  // === SIMPAN PERUBAHAN KATA SANDI ===
+  // === SIMPAN PERUBAHAN KATA SANDI SECARA SINKRON DAN MENYELURUH ===
   user.password = newPass;
   if (db.currentUser) {
     db.currentUser.password = newPass;
   }
 
   // Sinkronisasi ke db.users
+  let userUpdated = false;
   db.users.forEach(u => {
     if ((user.nik && u.nik === user.nik) || 
         (user.id && u.id === user.id) || 
         (user.username && u.username === user.username) || 
-        (user.karyawanId && u.karyawanId === user.karyawanId)) {
+        (user.karyawanId && u.karyawanId === user.karyawanId) ||
+        (user.nama && u.nama && u.nama.toLowerCase() === user.nama.toLowerCase())) {
       u.password = newPass;
+      userUpdated = true;
     }
   });
+
+  // Jika belum ada di db.users (misalnya karyawan lapangan), tambahkan ke db.users
+  if (!userUpdated && user.role === 'karyawan') {
+    db.users.push({
+      id: db.users.length + 1,
+      username: user.nik,
+      nik: user.nik,
+      role: 'karyawan',
+      roleLabel: 'Cleaner CS',
+      nama: user.nama,
+      status: user.status || 'Tetap',
+      karyawanId: user.karyawanId,
+      password: newPass
+    });
+  }
 
   // Sinkronisasi ke db.karyawan
   if (db.karyawan) {
     db.karyawan.forEach(k => {
       if ((user.nik && k.nik === user.nik) || 
           (user.karyawanId && k.id === user.karyawanId) ||
-          (user.nama && k.nama.toLowerCase() === user.nama.toLowerCase())) {
+          (user.nama && k.nama && k.nama.toLowerCase() === user.nama.toLowerCase())) {
         k.password = newPass;
       }
     });

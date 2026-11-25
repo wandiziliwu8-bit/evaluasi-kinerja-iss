@@ -85,7 +85,7 @@ body {
 }
 
 /* ==========================================================================
-   LOGIN SCREEN (GRADIENT LOGO ISS KHAS ENTERPRISE BERWARNA & ELEGAN)
+   LOGIN SCREEN (NORMAL ENTERPRISE LOGIN)
    ========================================================================== */
 .login-wrapper {
   display: flex;
@@ -93,60 +93,19 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 32px 16px;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #071739 0%, #00004c 28%, #002b80 65%, #0284c7 100%);
-}
-
-.login-wrapper::before {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(2, 132, 199, 0.35) 0%, rgba(0, 51, 153, 0.12) 55%, transparent 75%);
-  top: -120px;
-  left: -120px;
-  pointer-events: none;
-  filter: blur(40px);
-}
-
-.login-wrapper::after {
-  content: '';
-  position: absolute;
-  width: 550px;
-  height: 550px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, rgba(0, 0, 76, 0.2) 60%, transparent 80%);
-  bottom: -150px;
-  right: -150px;
-  pointer-events: none;
-  filter: blur(50px);
+  background: radial-gradient(circle at 50% 15%, #eef2ff 0%, #f8fafc 60%, #f1f5f9 100%);
 }
 
 .login-card {
   width: 100%;
-  max-width: 430px;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  padding: 38px 34px;
-  box-shadow: 0 20px 45px -10px rgba(0, 0, 76, 0.35), 0 10px 20px -5px rgba(2, 132, 199, 0.2);
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 76, 0.08), 0 8px 10px -6px rgba(0, 0, 76, 0.04);
   position: relative;
   transition: all 0.3s ease;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.login-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: linear-gradient(90deg, #00004c 0%, #003399 35%, #0284c7 70%, #38bdf8 100%);
 }
 
 .brand-header {
@@ -158,18 +117,18 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   background: #ffffff;
   border-radius: 50%;
   margin: 0 auto 14px auto;
-  box-shadow: 0 6px 18px rgba(0, 51, 153, 0.16);
-  border: 2px solid #e0f2fe;
+  box-shadow: 0 4px 14px rgba(0, 0, 76, 0.08);
+  border: 1px solid #e2e8f0;
 }
 
 .iss-logo-img {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
   display: block;
   border-radius: 50%;
@@ -353,22 +312,16 @@ body {
 
 .btn-login {
   width: 100%;
-  height: 46px;
-  font-size: 0.94rem;
-  font-weight: 700;
+  height: 44px;
+  font-size: 0.92rem;
+  font-weight: 600;
   border-radius: 10px;
-  background: linear-gradient(135deg, #00004c 0%, #003399 50%, #0284c7 100%);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 4px 14px rgba(0, 51, 153, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 76, 0.15);
   margin-bottom: 20px;
-  cursor: pointer;
-  transition: all 0.25s ease;
 }
 
 .btn-login:hover {
-  background: linear-gradient(135deg, #000c30 0%, #002878 50%, #0275b1 100%);
-  box-shadow: 0 6px 18px rgba(0, 51, 153, 0.45);
+  box-shadow: 0 6px 16px rgba(0, 0, 76, 0.25);
   transform: translateY(-1px);
 }
 
@@ -4711,9 +4664,20 @@ function handleLogin(e) {
     if (!k && uKaryawan && uKaryawan.karyawanId) {
       k = db.karyawan.find(x => x.id === uKaryawan.karyawanId);
     }
+    if (k && !uKaryawan) {
+      uKaryawan = db.users.find(x => x.role === 'karyawan' && (x.nik === k.nik || x.karyawanId === k.id || (x.nama && x.nama.toLowerCase() === k.nama.toLowerCase())));
+    }
     if (k || uKaryawan) {
       const targetK = k || {};
-      const activePassword = (k && k.password) || (uKaryawan && uKaryawan.password) || targetK.nik || (uKaryawan && uKaryawan.nik);
+      // Prioritaskan kata sandi yang telah diubah di db.karyawan atau db.users
+      let activePassword = '';
+      if (k && k.password) {
+        activePassword = k.password;
+      } else if (uKaryawan && uKaryawan.password) {
+        activePassword = uKaryawan.password;
+      } else {
+        activePassword = targetK.nik || (uKaryawan && uKaryawan.nik);
+      }
       matchedUser = {
         id: uKaryawan ? uKaryawan.id : (100 + targetK.id),
         username: targetK.nik || (uKaryawan && uKaryawan.username),
@@ -4738,20 +4702,17 @@ function handleLogin(e) {
     return;
   }
 
-  // Verifikasi Kata Sandi (Awal = NIK masing-masing, atau sandi baru yang telah diubah)
-  // Menerima kata sandi user, NIK, serta sandi master evaluasi: '123' / '123456' / 'admin'
-  const isPassValid = (password === expectedPassword) || 
-                      (matchedUser.password && password === matchedUser.password) ||
-                      (password === '123') || 
-                      (password === '123456') ||
-                      (password === matchedUser.nik) ||
-                      (selectedRole === 'admin' && (password === 'admin' || password === '123'));
+  // Verifikasi Kata Sandi:
+  // HANYA kata sandi aktif/terbaru yang tersimpan di sistem yang sah.
+  // Jika kata sandi telah diubah, maka HANYA kata sandi baru yang dapat digunakan.
+  // Kata sandi lama (maupun NIK lama) TIDAK DAPAT digunakan lagi.
+  const isPassValid = (password === expectedPassword);
 
   if (!isPassValid) {
     if (errorAlert) errorAlert.classList.add('show');
     if (passwordInput) passwordInput.classList.add('is-invalid');
     if (errorDesc) {
-      errorDesc.innerHTML = 'Kata sandi salah untuk <b>' + matchedUser.nama + '</b>.<br><small style="color:var(--text-muted)">Gunakan kata sandi baru Anda atau kata sandi default (NIK: <code>' + matchedUser.nik + '</code>).</small>';
+      errorDesc.innerHTML = 'Kata sandi salah untuk akun <b>' + matchedUser.nama + '</b>.<br><small style="color:var(--text-muted)">Harap gunakan kata sandi baru Anda. Kata sandi lama sudah tidak dapat digunakan.</small>';
     }
     return;
   }
@@ -5124,10 +5085,7 @@ function handleProsesGantiSandi(e) {
   }
 
   // 3. Verifikasi kata sandi saat ini
-  const isOldCorrect = (oldPass === currentSavedPass) || 
-                       (oldPass === user.nik) || 
-                       (oldPass === '123') || 
-                       (user.role === 'admin' && oldPass === 'admin');
+  const isOldCorrect = (oldPass === currentSavedPass);
   if (!isOldCorrect) {
     setAlert('Kata sandi saat ini yang Anda masukkan salah atau tidak cocok!');
     if (oldPassInput) oldPassInput.focus();
@@ -5163,28 +5121,46 @@ function handleProsesGantiSandi(e) {
     return;
   }
 
-  // === SIMPAN PERUBAHAN KATA SANDI ===
+  // === SIMPAN PERUBAHAN KATA SANDI SECARA SINKRON DAN MENYELURUH ===
   user.password = newPass;
   if (db.currentUser) {
     db.currentUser.password = newPass;
   }
 
   // Sinkronisasi ke db.users
+  let userUpdated = false;
   db.users.forEach(u => {
     if ((user.nik && u.nik === user.nik) || 
         (user.id && u.id === user.id) || 
         (user.username && u.username === user.username) || 
-        (user.karyawanId && u.karyawanId === user.karyawanId)) {
+        (user.karyawanId && u.karyawanId === user.karyawanId) ||
+        (user.nama && u.nama && u.nama.toLowerCase() === user.nama.toLowerCase())) {
       u.password = newPass;
+      userUpdated = true;
     }
   });
+
+  // Jika belum ada di db.users (misalnya karyawan lapangan), tambahkan ke db.users
+  if (!userUpdated && user.role === 'karyawan') {
+    db.users.push({
+      id: db.users.length + 1,
+      username: user.nik,
+      nik: user.nik,
+      role: 'karyawan',
+      roleLabel: 'Cleaner CS',
+      nama: user.nama,
+      status: user.status || 'Tetap',
+      karyawanId: user.karyawanId,
+      password: newPass
+    });
+  }
 
   // Sinkronisasi ke db.karyawan
   if (db.karyawan) {
     db.karyawan.forEach(k => {
       if ((user.nik && k.nik === user.nik) || 
           (user.karyawanId && k.id === user.karyawanId) ||
-          (user.nama && k.nama.toLowerCase() === user.nama.toLowerCase())) {
+          (user.nama && k.nama && k.nama.toLowerCase() === user.nama.toLowerCase())) {
         k.password = newPass;
       }
     });

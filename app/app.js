@@ -2389,18 +2389,25 @@ function handleLogin(e) {
     if (!k) {
       k = db.karyawan.find(x => x.nama.toLowerCase().includes(inputVal));
     }
-    if (k) {
+    // Cek juga di tabel users jika akun karyawan terdaftar di users
+    let uKaryawan = db.users.find(x => x.role === 'karyawan' && (x.nik.toLowerCase() === inputVal || (x.username && x.username.toLowerCase() === inputVal)));
+    if (!k && uKaryawan && uKaryawan.karyawanId) {
+      k = db.karyawan.find(x => x.id === uKaryawan.karyawanId);
+    }
+    if (k || uKaryawan) {
+      const targetK = k || {};
+      const activePassword = (k && k.password) || (uKaryawan && uKaryawan.password) || targetK.nik || (uKaryawan && uKaryawan.nik);
       matchedUser = {
-        id: 100 + k.id,
-        username: k.nik,
-        nik: k.nik,
+        id: uKaryawan ? uKaryawan.id : (100 + targetK.id),
+        username: targetK.nik || (uKaryawan && uKaryawan.username),
+        nik: targetK.nik || (uKaryawan && uKaryawan.nik),
         role: 'karyawan',
-        nama: k.nama,
-        karyawanId: k.id,
-        unit: k.gedung + ' (' + k.shift + ')',
-        password: k.password || k.nik
+        nama: targetK.nama || (uKaryawan && uKaryawan.nama),
+        karyawanId: targetK.id || (uKaryawan && uKaryawan.karyawanId),
+        unit: (targetK.gedung || 'Gedung Pemda') + ' (' + (targetK.shift || 'Shift Pagi') + ')',
+        password: activePassword
       };
-      expectedPassword = k.password || k.nik;
+      expectedPassword = activePassword;
     }
   }
 
@@ -2417,6 +2424,7 @@ function handleLogin(e) {
   // Verifikasi Kata Sandi (Awal = NIK masing-masing, atau sandi baru yang telah diubah)
   // Menerima kata sandi user, NIK, serta sandi master evaluasi: '123' / '123456' / 'admin'
   const isPassValid = (password === expectedPassword) || 
+                      (matchedUser.password && password === matchedUser.password) ||
                       (password === '123') || 
                       (password === '123456') ||
                       (password === matchedUser.nik) ||
@@ -2426,7 +2434,7 @@ function handleLogin(e) {
     if (errorAlert) errorAlert.classList.add('show');
     if (passwordInput) passwordInput.classList.add('is-invalid');
     if (errorDesc) {
-      errorDesc.innerHTML = 'Kata sandi salah untuk <b>' + matchedUser.nama + '</b>.<br><small style="color:var(--text-muted)">Gunakan kata sandi akun Anda (default: sesuai NIK: <code>' + matchedUser.nik + '</code>).</small>';
+      errorDesc.innerHTML = 'Kata sandi salah untuk <b>' + matchedUser.nama + '</b>.<br><small style="color:var(--text-muted)">Gunakan kata sandi baru Anda atau kata sandi default (NIK: <code>' + matchedUser.nik + '</code>).</small>';
     }
     return;
   }
@@ -2635,7 +2643,7 @@ function renderGantiSandiView(db) {
     <div class="page-header">
       <div class="page-title-group">
         <h2>Ganti Kata Sandi Akun</h2>
-        <p>Perbarui kata sandi akun Anda untuk menjaga keamanan data</p>
+        <p>Perbarui kata sandi akun Anda untuk menjaga keamanan data akun</p>
       </div>
     </div>
 
@@ -2645,25 +2653,41 @@ function renderGantiSandiView(db) {
         <span class="badge badge-info">NIK: ${user.nik}</span>
       </div>
 
-      <div style="background: var(--bg-subtle); padding: 14px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.84rem; color: var(--text-secondary); border-left: 4px solid var(--iss-navy);">
+      <div style="background: var(--bg-subtle); padding: 14px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.84rem; color: var(--text-secondary); border-left: 4px solid var(--iss-navy);">
         Nama Pengguna: <strong>${user.nama}</strong><br>
-        Jabatan: <strong>${user.role.toUpperCase()}</strong>
+        Jabatan: <strong>${(user.roleLabel || user.role).toUpperCase()}</strong>
       </div>
+
+      <!-- Alert Box Notifikasi Validasi & Hasil Langsung di Form -->
+      <div id="ganti-sandi-alert" style="display: none; padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.86rem; line-height: 1.5;"></div>
 
       <form onsubmit="handleProsesGantiSandi(event)">
         <div class="form-group">
           <label class="form-label" for="old-password">Kata Sandi Saat Ini</label>
-          <input type="password" id="old-password" class="form-input" placeholder="Masukkan kata sandi saat ini" required>
+          <div style="position: relative;">
+            <input type="password" id="old-password" class="form-input" placeholder="Masukkan kata sandi saat ini" required autocomplete="current-password" style="padding-right: 42px;">
+            <button type="button" onclick="togglePassField('old-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.05rem;" title="Lihat/Sembunyikan Sandi">👁️</button>
+          </div>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="new-password">Kata Sandi Baru</label>
-          <input type="password" id="new-password" class="form-input" placeholder="Masukkan kata sandi baru (minimal 4 karakter)" required>
+          <div style="position: relative;">
+            <input type="password" id="new-password" class="form-input" placeholder="Minimal 5 karakter & minimal 2 karakter berbeda" required autocomplete="new-password" style="padding-right: 42px;">
+            <button type="button" onclick="togglePassField('new-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.05rem;" title="Lihat/Sembunyikan Sandi">👁️</button>
+          </div>
+          <div style="margin-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: flex-start; gap: 5px;">
+            <span style="font-size: 0.9rem;">ℹ️</span>
+            <span>Syarat: <strong>Minimal 5 karakter</strong> dan mempunyai <strong>minimal 2 karakter berbeda</strong> (contoh: <code>sandi1</code>, <code>iss26</code>).</span>
+          </div>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="confirm-password">Konfirmasi Kata Sandi Baru</label>
-          <input type="password" id="confirm-password" class="form-input" placeholder="Ketik ulang kata sandi baru" required>
+          <div style="position: relative;">
+            <input type="password" id="confirm-password" class="form-input" placeholder="Ketik ulang kata sandi baru" required autocomplete="new-password" style="padding-right: 42px;">
+            <button type="button" onclick="togglePassField('confirm-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.05rem;" title="Lihat/Sembunyikan Sandi">👁️</button>
+          </div>
         </div>
 
         <div style="margin-top: 24px; display: flex; gap: 12px;">
@@ -2679,59 +2703,166 @@ function renderGantiSandiView(db) {
   `;
 }
 
+// Helper untuk tombol tampilkan/sembunyikan sandi (mata)
+function togglePassField(fieldId, btn) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  if (el.type === 'password') {
+    el.type = 'text';
+    if (btn) btn.innerText = '🙈';
+  } else {
+    el.type = 'password';
+    if (btn) btn.innerText = '👁️';
+  }
+}
+
 // --- PROSES SIMPAN GANTI KATA SANDI ---
 function handleProsesGantiSandi(e) {
   e.preventDefault();
-  const oldPass = document.getElementById('old-password').value.trim();
-  const newPass = document.getElementById('new-password').value.trim();
-  const confPass = document.getElementById('confirm-password').value.trim();
+  const oldPassInput = document.getElementById('old-password');
+  const newPassInput = document.getElementById('new-password');
+  const confPassInput = document.getElementById('confirm-password');
+  const alertEl = document.getElementById('ganti-sandi-alert');
+
+  const oldPass = oldPassInput ? oldPassInput.value.trim() : '';
+  const newPass = newPassInput ? newPassInput.value.trim() : '';
+  const confPass = confPassInput ? confPassInput.value.trim() : '';
+
+  const setAlert = (message, isSuccess = false) => {
+    if (alertEl) {
+      alertEl.style.display = 'block';
+      if (isSuccess) {
+        alertEl.style.background = '#dcfce7';
+        alertEl.style.borderLeft = '4px solid #16a34a';
+        alertEl.style.color = '#15803d';
+        alertEl.innerHTML = message;
+      } else {
+        alertEl.style.background = '#fee2e2';
+        alertEl.style.borderLeft = '4px solid #ef4444';
+        alertEl.style.color = '#b91c1c';
+        alertEl.innerHTML = `⚠️ <strong>Pemberitahuan Kesalahan:</strong><br>${message}`;
+      }
+    }
+    if (isSuccess) {
+      showToast('Kata sandi berhasil diperbarui!', 'success');
+    } else {
+      const cleanMsg = message.replace(/<[^>]*>?/gm, '');
+      showToast(cleanMsg, 'danger');
+    }
+  };
 
   const db = getDb();
   const user = db.currentUser;
-  const currentSavedPass = user.password || user.nik;
-
-  // Verifikasi sandi lama
-  if (oldPass !== currentSavedPass && oldPass !== '123' && oldPass !== user.nik) {
-    showToast('Kata sandi saat ini tidak cocok!', 'danger');
-    document.getElementById('old-password').focus();
+  if (!user) {
+    setAlert('Sesi pengguna tidak valid. Silakan login kembali.');
     return;
   }
 
-  // Validasi sandi baru
-  if (newPass.length < 35) {
-    showToast('Kata sandi baru minimal 4 karakter!', 'danger');
-    document.getElementById('new-password').focus();
+  // 1. Validasi Kolom Terisi
+  if (!oldPass) {
+    setAlert('Kolom <b>Kata Sandi Saat Ini</b> wajib diisi!');
+    if (oldPassInput) oldPassInput.focus();
+    return;
+  }
+  if (!newPass) {
+    setAlert('Kolom <b>Kata Sandi Baru</b> wajib diisi!');
+    if (newPassInput) newPassInput.focus();
+    return;
+  }
+  if (!confPass) {
+    setAlert('Kolom <b>Konfirmasi Kata Sandi Baru</b> wajib diisi!');
+    if (confPassInput) confPassInput.focus();
     return;
   }
 
-  if (newPass !== confPass) {
-    showToast('Konfirmasi kata sandi baru tidak cocok!', 'danger');
-    document.getElementById('confirm-password').focus();
-    return;
-  }
-
-  // Simpan sandi baru ke akun terkait
-  user.password = newPass;
-
-  // Update di tabel users jika Admin/Supervisor
+  // 2. Ambil kata sandi saat ini yang tersimpan di sistem
+  let currentSavedPass = user.password || user.nik;
   if (user.role === 'admin' || user.role === 'supervisor') {
-    const targetUser = db.users.find(u => u.nik === user.nik || u.id === user.id);
-    if (targetUser) targetUser.password = newPass;
+    const targetUser = db.users.find(u => (user.nik && u.nik === user.nik) || (user.id && u.id === user.id) || (user.username && u.username === user.username));
+    if (targetUser && targetUser.password) currentSavedPass = targetUser.password;
+  } else {
+    const targetK = db.karyawan.find(k => (user.karyawanId && k.id === user.karyawanId) || (user.nik && k.nik === user.nik));
+    const targetU = db.users.find(u => (user.nik && u.nik === user.nik) || (user.karyawanId && u.karyawanId === user.karyawanId));
+    if (targetK && targetK.password) currentSavedPass = targetK.password;
+    else if (targetU && targetU.password) currentSavedPass = targetU.password;
   }
 
-  // Update di tabel karyawan jika Petugas CS
-  if (user.karyawanId) {
-    const targetKaryawan = db.karyawan.find(k => k.id === user.karyawanId);
-    if (targetKaryawan) targetKaryawan.password = newPass;
+  // 3. Verifikasi kata sandi saat ini
+  const isOldCorrect = (oldPass === currentSavedPass) || 
+                       (oldPass === user.nik) || 
+                       (oldPass === '123') || 
+                       (user.role === 'admin' && oldPass === 'admin');
+  if (!isOldCorrect) {
+    setAlert('Kata sandi saat ini yang Anda masukkan salah atau tidak cocok!');
+    if (oldPassInput) oldPassInput.focus();
+    return;
+  }
+
+  // 4. Validasi minimal 5 karakter (panjang kata sandi)
+  if (newPass.length < 5) {
+    setAlert(`Kata sandi baru minimal harus 5 karakter! (Panjang saat ini: ${newPass.length} karakter)`);
+    if (newPassInput) newPassInput.focus();
+    return;
+  }
+
+  // 5. Validasi minimal 2 karakter berbeda (tidak boleh karakter sama berulang)
+  const uniqueChars = new Set(newPass.split('')).size;
+  if (uniqueChars < 2) {
+    setAlert(`Kata sandi baru harus memiliki <b>minimal 2 karakter berbeda</b>! Tidak boleh menggunakan karakter yang sama semua (misal: "11111" atau "aaaaa").`);
+    if (newPassInput) newPassInput.focus();
+    return;
+  }
+
+  // 6. Validasi kata sandi baru tidak boleh sama dengan kata sandi saat ini
+  if (newPass === oldPass || newPass === currentSavedPass) {
+    setAlert('Kata sandi baru tidak boleh sama dengan kata sandi saat ini! Silakan gunakan kata sandi baru.');
+    if (newPassInput) newPassInput.focus();
+    return;
+  }
+
+  // 7. Validasi kecocokan konfirmasi kata sandi
+  if (newPass !== confPass) {
+    setAlert('Konfirmasi kata sandi baru tidak cocok dengan kata sandi baru! Harap ketik ulang dengan benar.');
+    if (confPassInput) confPassInput.focus();
+    return;
+  }
+
+  // === SIMPAN PERUBAHAN KATA SANDI ===
+  user.password = newPass;
+  if (db.currentUser) {
+    db.currentUser.password = newPass;
+  }
+
+  // Sinkronisasi ke db.users
+  db.users.forEach(u => {
+    if ((user.nik && u.nik === user.nik) || 
+        (user.id && u.id === user.id) || 
+        (user.username && u.username === user.username) || 
+        (user.karyawanId && u.karyawanId === user.karyawanId)) {
+      u.password = newPass;
+    }
+  });
+
+  // Sinkronisasi ke db.karyawan
+  if (db.karyawan) {
+    db.karyawan.forEach(k => {
+      if ((user.nik && k.nik === user.nik) || 
+          (user.karyawanId && k.id === user.karyawanId) ||
+          (user.nama && k.nama.toLowerCase() === user.nama.toLowerCase())) {
+        k.password = newPass;
+      }
+    });
   }
 
   saveDb(db);
-  showToast('Kata sandi berhasil diperbarui! Gunakan sandi baru saat login berikutnya.', 'success');
 
-  // Reset formulir
-  document.getElementById('old-password').value = '';
-  document.getElementById('new-password').value = '';
-  document.getElementById('confirm-password').value = '';
+  // Tampilkan notifikasi keberhasilan
+  setAlert(`✅ <strong>Kata Sandi Berhasil Diubah!</strong><br>Kata sandi baru Anda telah aktif. Anda dapat langsung menggunakan kata sandi baru ini saat login.`, true);
+
+  // Kosongkan form
+  if (oldPassInput) oldPassInput.value = '';
+  if (newPassInput) newPassInput.value = '';
+  if (confPassInput) confPassInput.value = '';
 }
 
 // --- ROUTER KONTEN UTAMA ---

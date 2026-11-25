@@ -3019,7 +3019,7 @@ function renderDashboardView(role, db) {
       </div>
 
       <!-- Toolbar Filter & Pencarian -->
-      <div class="dashboard-filter-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; background: #f8fafc; padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+      <div class="dashboard-filter-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; background: linear-gradient(135deg, #f0f6fc 0%, #e6f0fa 100%); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
         <!-- Input Pencarian Nama Karyawan / NIK / Gedung -->
         <div style="position: relative; flex: 1; min-width: 260px;">
           <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; pointer-events: none; color: #94a3b8;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
@@ -4087,7 +4087,7 @@ function renderKaryawanProfilView(db) {
 
     <div class="panel" style="max-width:540px; margin:0 auto">
       <div style="display:flex; gap:16px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border-color)">
-        <div class="employee-photo" style="width:72px; height:72px; font-size:1.8rem; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:50%; font-weight:800; flex-shrink:0;">
+        <div class="employee-photo" style="width:72px; height:72px; font-size:1.8rem; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #00004c 0%, #003399 55%, #0284c7 100%); color:white; border-radius:50%; font-weight:800; flex-shrink:0; box-shadow: 0 4px 12px rgba(0, 51, 153, 0.25);">
           ${k.nama ? k.nama.charAt(0) : 'K'}
         </div>
         <div>
@@ -4100,15 +4100,15 @@ function renderKaryawanProfilView(db) {
       </div>
 
       <div class="breakdown-list">
-        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #edf4fc;">
           <span class="label" style="font-weight: 600; color: var(--text-secondary);">Nama Lengkap:</span>
           <span class="val" style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">${k.nama}</span>
         </div>
-        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #edf4fc;">
           <span class="label" style="font-weight: 600; color: var(--text-secondary);">Nomor Induk Karyawan (NIK):</span>
-          <span class="val"><code style="font-weight: 700; font-size: 0.95rem; color: var(--iss-navy); background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">${k.nik}</code></span>
+          <span class="val"><code style="font-weight: 700; font-size: 0.95rem; color: var(--iss-navy); background: #edf4fc; padding: 2px 8px; border-radius: 4px;">${k.nik}</code></span>
         </div>
-        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #edf4fc;">
           <span class="label" style="font-weight: 600; color: var(--text-secondary);">Jabatan:</span>
           <span class="val" style="font-weight: 600; color: var(--text-main);">${k.jabatan || 'Cleaner'}</span>
         </div>

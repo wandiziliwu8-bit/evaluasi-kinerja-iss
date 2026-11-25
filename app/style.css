@@ -1,25 +1,30 @@
 /* ==========================================================================
    SISTEM INFORMASI PENILAIAN KINERJA KARYAWAN PT ISS INDONESIA
    AREA PENEMPATAN: PEMDA KOTA TANGERANG SELATAN
-   THEME: CLEAN WHITE (PUTIH BERSIH) DENGAN AKSEN BIRU LOGO ISS
+   THEME: GRADIASI WARNA LOGO ISS (NAVY, ROYAL BLUE, CYAN & AMBIENT ICE BLUE)
    ========================================================================== */
 
 :root {
   /* Official ISS Navy Blue & Light Palette */
   --iss-navy: #00004C;
-  --iss-navy-hover: #0a1f68;
+  --iss-navy-hover: #07193d;
   --iss-blue-accent: #003399;
   --iss-blue-light: #e8f0fe;
+  --iss-cyan: #0284c7;
+  --iss-cyan-light: #38bdf8;
+  --iss-gradient: linear-gradient(135deg, #00004c 0%, #003399 55%, #0284c7 100%);
+  --iss-gradient-hover: linear-gradient(135deg, #000038 0%, #002b80 55%, #0369a1 100%);
+  --iss-gradient-soft: linear-gradient(135deg, #eef4fc 0%, #e1effe 50%, #e0f2fe 100%);
 
-  /* Backgrounds */
-  --bg-body: #f8fafc;
+  /* Backgrounds: Subtle, elegant, slightly colored with ISS ambient tints */
+  --bg-body: #eef4fc;
   --bg-card: #ffffff;
   --bg-surface: #ffffff;
-  --bg-subtle: #f1f5f9;
+  --bg-subtle: #edf4fc;
 
   /* Borders */
-  --border-color: #e2e8f0;
-  --border-focus: #00004C;
+  --border-color: #dbeafe;
+  --border-focus: #003399;
 
   /* Text */
   --text-main: #0f172a;
@@ -34,12 +39,12 @@
   --warning-bg: #fef3c7;
   --danger: #b91c1c;
   --danger-bg: #fee2e2;
-  --info: #0369a1;
+  --info: #0284c7;
   --info-bg: #e0f2fe;
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 51, 153, 0.05);
+  --shadow-md: 0 4px 10px -1px rgba(0, 51, 153, 0.08), 0 2px 4px -2px rgba(0, 51, 153, 0.04);
+  --shadow-lg: 0 12px 20px -3px rgba(0, 51, 153, 0.12), 0 4px 6px -4px rgba(0, 51, 153, 0.06);
 
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -58,7 +63,8 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-body);
+  background: linear-gradient(145deg, #eef4fc 0%, #e5f0fa 30%, #ecf4fd 65%, #f2f7fd 100%);
+  background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   line-height: 1.5;
@@ -66,7 +72,7 @@ body {
 }
 
 /* ==========================================================================
-   LOGIN SCREEN (NORMAL ENTERPRISE LOGIN)
+   LOGIN SCREEN (GRADIENT LOGO ISS KHAS ENTERPRISE BERWARNA & ELEGAN)
    ========================================================================== */
 .login-wrapper {
   display: flex;
@@ -74,19 +80,60 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 32px 16px;
-  background: radial-gradient(circle at 50% 15%, #eef2ff 0%, #f8fafc 60%, #f1f5f9 100%);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #071739 0%, #00004c 28%, #002b80 65%, #0284c7 100%);
+}
+
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.35) 0%, rgba(0, 51, 153, 0.12) 55%, transparent 75%);
+  top: -120px;
+  left: -120px;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.login-wrapper::after {
+  content: '';
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, rgba(0, 0, 76, 0.2) 60%, transparent 80%);
+  bottom: -150px;
+  right: -150px;
+  pointer-events: none;
+  filter: blur(50px);
 }
 
 .login-card {
   width: 100%;
-  max-width: 420px;
-  background: #ffffff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 16px;
-  padding: 36px 32px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 76, 0.08), 0 8px 10px -6px rgba(0, 0, 76, 0.04);
+  max-width: 430px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  padding: 38px 34px;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 76, 0.35), 0 10px 20px -5px rgba(2, 132, 199, 0.2);
   position: relative;
   transition: all 0.3s ease;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #00004c 0%, #003399 35%, #0284c7 70%, #38bdf8 100%);
 }
 
 .brand-header {
@@ -98,18 +145,18 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 68px;
+  width: 72px;
+  height: 72px;
   background: #ffffff;
   border-radius: 50%;
   margin: 0 auto 14px auto;
-  box-shadow: 0 4px 14px rgba(0, 0, 76, 0.08);
-  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 18px rgba(0, 51, 153, 0.16);
+  border: 2px solid #e0f2fe;
 }
 
 .iss-logo-img {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
   display: block;
   border-radius: 50%;
@@ -293,16 +340,22 @@ body {
 
 .btn-login {
   width: 100%;
-  height: 44px;
-  font-size: 0.92rem;
-  font-weight: 600;
+  height: 46px;
+  font-size: 0.94rem;
+  font-weight: 700;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 76, 0.15);
+  background: linear-gradient(135deg, #00004c 0%, #003399 50%, #0284c7 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 51, 153, 0.3);
   margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .btn-login:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 76, 0.25);
+  background: linear-gradient(135deg, #000c30 0%, #002878 50%, #0275b1 100%);
+  box-shadow: 0 6px 18px rgba(0, 51, 153, 0.45);
   transform: translateY(-1px);
 }
 
@@ -449,13 +502,16 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--iss-navy);
+  background: linear-gradient(135deg, #00004c 0%, #003399 55%, #0284c7 100%);
   color: white;
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 51, 153, 0.22);
 }
 
 .btn-primary:hover {
-  background-color: var(--iss-navy-hover);
-  box-shadow: 0 2px 6px rgba(0, 0, 76, 0.25);
+  background: linear-gradient(135deg, #000038 0%, #002b80 55%, #0369a1 100%);
+  box-shadow: 0 5px 14px rgba(0, 51, 153, 0.35);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -514,10 +570,11 @@ body {
   display: flex !important;
 }
 
-/* Clean White Navbar */
+/* Branded Navbar with ISS Gradient Top Accent */
 .navbar {
   height: 64px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
@@ -526,7 +583,17 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 10px rgba(0, 51, 153, 0.05);
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00004c 0%, #003399 35%, #0284c7 70%, #38bdf8 100%);
 }
 
 .nav-left,
@@ -545,7 +612,8 @@ body {
   background: #ffffff;
   padding: 2px;
   flex-shrink: 0;
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid #dbeafe;
+  box-shadow: 0 2px 6px rgba(0, 51, 153, 0.08);
 }
 
 .system-titles,
@@ -584,9 +652,9 @@ body {
   align-items: center;
   gap: 10px;
   padding: 5px 14px;
-  background: var(--bg-subtle);
+  background: #f0f6ff;
   border-radius: var(--radius-full);
-  border: 1px solid var(--border-color);
+  border: 1px solid #dbeafe;
 }
 
 .user-profile-badge .user-meta,
@@ -599,8 +667,16 @@ body {
   width: 32px;
   height: 32px;
   border-radius: var(--radius-full);
-  background: var(--iss-navy);
+  background: linear-gradient(135deg, #00004c 0%, #003399 100%);
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 51, 153, 0.25);
+}
   display: flex;
   align-items: center;
   justify-content: center;
@@ -662,12 +738,12 @@ body {
   position: relative;
 }
 
-/* Sidebar with Deep Navy Tone matching ISS Logo */
+/* Sidebar with Gentle Gradient Matching ISS Theme */
 .sidebar {
   width: 260px;
   min-width: 260px;
   max-width: 260px;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff 0%, #f6faff 50%, #edf4fc 100%);
   border-right: 1px solid var(--border-color);
   padding: 20px 14px;
   display: flex;
@@ -708,13 +784,14 @@ body {
 }
 
 .sidebar-item:hover {
-  background: var(--bg-subtle);
-  color: var(--iss-navy);
+  background: #e8f1fc;
+  color: #003399;
 }
 
 .sidebar-item.active {
-  background: var(--iss-navy);
+  background: linear-gradient(135deg, #00004c 0%, #003399 55%, #0284c7 100%);
   color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 51, 153, 0.25);
 }
 
 .sidebar-item .item-icon {
@@ -727,12 +804,16 @@ body {
   flex-shrink: 0;
 }
 
-/* Main Workspace */
+/* Main Workspace with Subtle Colored ISS Ambient Gradient Background */
 .main-content {
   flex: 1;
   min-width: 0;
   padding: 24px 28px 48px;
-  background-color: var(--bg-body);
+  background: radial-gradient(circle at 10% 8%, rgba(2, 132, 199, 0.05) 0%, transparent 45%),
+              radial-gradient(circle at 92% 16%, rgba(0, 51, 153, 0.04) 0%, transparent 40%),
+              radial-gradient(circle at 50% 92%, rgba(99, 102, 241, 0.03) 0%, transparent 50%),
+              linear-gradient(180deg, rgba(238, 244, 252, 0.5) 0%, rgba(246, 250, 255, 0.85) 100%);
+  background-attachment: fixed;
   overflow-y: auto;
 }
 
@@ -766,12 +847,42 @@ body {
 }
 
 .stat-card {
-  background: var(--bg-card);
+  background: linear-gradient(145deg, #ffffff 0%, #f6faff 100%);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 18px 20px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 51, 153, 0.05);
   border-left: 4px solid var(--iss-navy);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 51, 153, 0.08);
+}
+
+.stat-card:nth-child(1) {
+  background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 100%);
+  border-left-color: #003399;
+  border-color: #dbeafe;
+}
+
+.stat-card:nth-child(2) {
+  background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 100%);
+  border-left-color: #16a34a;
+  border-color: #dcfce7;
+}
+
+.stat-card:nth-child(3) {
+  background: linear-gradient(145deg, #ffffff 0%, #fffbeb 100%);
+  border-left-color: #d97706;
+  border-color: #fef3c7;
+}
+
+.stat-card:nth-child(4) {
+  background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%);
+  border-left-color: #0284c7;
+  border-color: #e0f2fe;
 }
 
 .stat-header {
@@ -789,15 +900,30 @@ body {
 }
 
 .stat-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--iss-navy);
-  background: rgba(30, 58, 138, 0.07);
-  border-radius: 6px;
+  color: #003399;
+  background: #e8f1fc;
+  border-radius: 8px;
   flex-shrink: 0;
+}
+
+.stat-card:nth-child(2) .stat-icon {
+  color: #16a34a;
+  background: #dcfce7;
+}
+
+.stat-card:nth-child(3) .stat-icon {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.stat-card:nth-child(4) .stat-icon {
+  color: #0284c7;
+  background: #e0f2fe;
 }
 
 .stat-value {
@@ -820,7 +946,7 @@ body {
   border-radius: var(--radius-lg);
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 16px rgba(0, 51, 153, 0.04);
 }
 
 .panel-header {
@@ -863,14 +989,14 @@ body {
 }
 
 .data-table th {
-  background: var(--bg-subtle);
-  color: var(--text-secondary);
+  background: linear-gradient(180deg, #edf4fc 0%, #e2eefb 100%);
+  color: #1e293b;
   font-weight: 700;
-  font-size: 0.72rem;
+  font-size: 0.73rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 11px 14px;
+  border-bottom: 2px solid #bfdbfe;
   text-align: left;
 }
 
@@ -882,7 +1008,7 @@ body {
 }
 
 .data-table tr:hover td {
-  background: #f8fafc;
+  background: #f0f6ff;
 }
 
 /* Badges */
@@ -1030,15 +1156,15 @@ body {
   cursor: pointer;
 }
 
-/* Calculator Card */
+/* Calculator Card with ISS Navy Theme */
 .calculator-card {
   position: sticky;
   top: 84px;
   background: #ffffff;
-  border: 2px solid var(--iss-navy);
+  border: 2px solid var(--iss-blue-accent);
   border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(0, 51, 153, 0.1);
 }
 
 .calc-title {
@@ -1053,7 +1179,8 @@ body {
 .score-display-box {
   text-align: center;
   padding: 16px;
-  background: var(--bg-subtle);
+  background: linear-gradient(135deg, #f0f6fc 0%, #e6f0fa 100%);
+  border: 1px solid #dbeafe;
   border-radius: var(--radius-md);
   margin-bottom: 16px;
 }
@@ -1096,13 +1223,13 @@ body {
   color: var(--text-main);
 }
 
-/* Scorecard Karyawan */
+/* Scorecard Karyawan with Branded Card */
 .scorecard-panel {
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 28px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 16px rgba(0, 51, 153, 0.05);
 }
 
 .scorecard-header {
@@ -1124,12 +1251,13 @@ body {
   width: 64px;
   height: 64px;
   border-radius: var(--radius-md);
-  background: var(--iss-navy);
+  background: linear-gradient(135deg, #00004c 0%, #003399 55%, #0284c7 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
   color: white;
+  box-shadow: 0 4px 10px rgba(0, 51, 153, 0.25);
 }
 
 .employee-info h3 {
@@ -1538,7 +1666,7 @@ body {
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
     box-shadow: 6px 0 25px rgba(0, 0, 0, 0.18);
     height: calc(100vh - 64px) !important;
-    background: #ffffff !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f6faff 50%, #edf4fc 100%) !important;
   }
 
   .sidebar.open {

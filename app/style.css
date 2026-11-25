@@ -718,9 +718,13 @@ body {
 }
 
 .sidebar-item .item-icon {
-  font-size: 1rem;
   width: 20px;
-  text-align: center;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  flex-shrink: 0;
 }
 
 /* Main Workspace */
@@ -785,7 +789,15 @@ body {
 }
 
 .stat-icon {
-  font-size: 1.15rem;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--iss-navy);
+  background: rgba(30, 58, 138, 0.07);
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .stat-value {

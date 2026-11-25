@@ -731,9 +731,13 @@ body {
 }
 
 .sidebar-item .item-icon {
-  font-size: 1rem;
   width: 20px;
-  text-align: center;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  flex-shrink: 0;
 }
 
 /* Main Workspace */
@@ -798,7 +802,15 @@ body {
 }
 
 .stat-icon {
-  font-size: 1.15rem;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--iss-navy);
+  background: rgba(30, 58, 138, 0.07);
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .stat-value {
@@ -1896,8 +1908,9 @@ body {
           </div>
         </div>
 
-        <button class="btn btn-outline btn-sm" onclick="handleLogout()" style="color:var(--danger); border-color:#fecaca">
-          🚪 <span class="logout-text">Keluar</span>
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()" style="color:var(--danger); border-color:#fecaca; display:inline-flex; align-items:center; gap:5px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span class="logout-text">Keluar</span>
         </button>
       </div>
     </header>
@@ -1934,7 +1947,7 @@ body {
     <div class="modal-window" style="max-width: 650px;">
       <div class="modal-header">
         <div>
-          <h3 style="margin-bottom: 4px;">✏️ Edit Penilaian Kinerja Karyawan</h3>
+          <h3 style="margin-bottom: 4px;">Edit Penilaian Kinerja Karyawan</h3>
           <p id="edit-modal-subtitle" style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">
             Karyawan: AMINUDIN (NIK: R1634454)
           </p>
@@ -2002,8 +2015,8 @@ body {
         <div class="form-group" style="margin-top: 14px;">
           <label class="form-label" for="edit-select-status">Status Penilaian</label>
           <select id="edit-select-status" class="form-input">
-            <option value="FINAL">🔒 FINAL (Terkunci &amp; Resmi)</option>
-            <option value="DRAFT">📝 DRAFT (Draf Sementara)</option>
+            <option value="FINAL">FINAL (Terkunci &amp; Resmi)</option>
+            <option value="DRAFT">DRAFT (Draf Sementara)</option>
           </select>
         </div>
 
@@ -2015,7 +2028,7 @@ body {
 
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeEditPenilaianModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="handleSaveEditPenilaian()">💾 Simpan Perubahan</button>
+        <button type="button" class="btn btn-primary" onclick="handleSaveEditPenilaian()">Simpan Perubahan</button>
       </div>
     </div>
   </div>
@@ -2024,7 +2037,7 @@ body {
   <div id="modal-edit-user" class="modal-overlay">
     <div class="modal-window" style="max-width: 540px;">
       <div class="modal-header">
-        <h3 style="margin: 0;">✏️ Edit Data &amp; Hak Akses Pengguna</h3>
+        <h3 style="margin: 0;">Edit Data &amp; Hak Akses Pengguna</h3>
         <button class="btn-close" onclick="closeEditUserModal()" aria-label="Tutup">&times;</button>
       </div>
       <div class="modal-body">
@@ -2067,7 +2080,7 @@ body {
       </div>
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeEditUserModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="saveEditUser()">💾 Simpan Perubahan</button>
+        <button type="button" class="btn btn-primary" onclick="saveEditUser()">Simpan Perubahan</button>
       </div>
     </div>
   </div>
@@ -2076,7 +2089,7 @@ body {
   <div id="modal-add-user" class="modal-overlay">
     <div class="modal-window" style="max-width: 540px;">
       <div class="modal-header">
-        <h3 style="margin: 0;">➕ Tambah Pengguna Baru</h3>
+        <h3 style="margin: 0;">Tambah Pengguna Baru</h3>
         <button class="btn-close" onclick="closeAddUserModal()" aria-label="Tutup">&times;</button>
       </div>
       <div class="modal-body">
@@ -2114,7 +2127,7 @@ body {
       </div>
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeAddUserModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="saveAddUser()">➕ Daftarkan Akun</button>
+        <button type="button" class="btn btn-primary" onclick="saveAddUser()">Daftarkan Akun</button>
       </div>
     </div>
   </div>
@@ -2123,7 +2136,7 @@ body {
   <div id="modal-tambah-periode" class="modal-overlay" onclick="if(event.target === this) closeTambahPeriodeModal()">
     <div class="modal-window" style="max-width: 520px;">
       <div class="modal-header">
-        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--iss-navy);">📅 Buka Periode Penilaian Baru</h3>
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--iss-navy);">Buka Periode Penilaian Baru</h3>
         <button class="btn-close" onclick="closeTambahPeriodeModal()" aria-label="Tutup">&times;</button>
       </div>
       <div class="modal-body">
@@ -2162,7 +2175,7 @@ body {
       </div>
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeTambahPeriodeModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="simpanTambahPeriode()">💾 Buka &amp; Simpan Periode</button>
+        <button type="button" class="btn btn-primary" onclick="simpanTambahPeriode()">Buka &amp; Simpan Periode</button>
       </div>
     </div>
   </div>
@@ -4475,11 +4488,17 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = 'toast toast-' + type;
-  let icon = '✅';
-  if (type === 'danger') icon = '❌';
-  if (type === 'info') icon = 'ℹ️';
+  
+  let iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  if (type === 'danger') {
+    iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+  } else if (type === 'info') {
+    iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
+  } else if (type === 'warning') {
+    iconSvg = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+  }
 
-  toast.innerHTML = '<span style="font-size:1.1rem">' + icon + '</span> <span>' + message + '</span>';
+  toast.innerHTML = iconSvg + ' <span>' + message + '</span>';
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -4735,6 +4754,22 @@ function renderApp() {
   renderContent();
 }
 
+// --- IKON NAVIGASI RESMI SISTEM (STANDAR ENTERPRISE SVG) ---
+const NAV_ICONS = {
+  dashboard: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>',
+  users: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+  karyawan: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+  bobot: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>',
+  periode: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>',
+  laporan: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>',
+  sandi: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>',
+  input: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>',
+  finalisasi: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+  scorecard: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>',
+  feedback: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
+  profil: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>'
+};
+
 // --- SIDEBAR MENU DINAMIS SESUAI HAK AKSES ---
 function renderSidebar(role) {
   const menuContainer = document.getElementById('sidebar-menu-list');
@@ -4745,66 +4780,70 @@ function renderSidebar(role) {
     html = `
       <div class="sidebar-category">Menu Administrator</div>
       <li class="sidebar-item ${db.activeTab === 'dashboard' ? 'active' : ''}" onclick="switchTab('dashboard')">
-        <span class="item-icon">📊</span> <span>Dashboard Utama</span>
+        <span class="item-icon">${NAV_ICONS.dashboard}</span> <span>Dashboard Utama</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'admin-users' ? 'active' : ''}" onclick="switchTab('admin-users')">
-        <span class="item-icon">👥</span> <span>Kelola Data Pengguna</span>
+        <span class="item-icon">${NAV_ICONS.users}</span> <span>Kelola Data Pengguna</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'admin-karyawan' ? 'active' : ''}" onclick="switchTab('admin-karyawan')">
-        <span class="item-icon">🧹</span> <span>Data 41 Karyawan CS</span>
+        <span class="item-icon">${NAV_ICONS.karyawan}</span> <span>Data 41 Karyawan CS</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'admin-bobot' ? 'active' : ''}" onclick="switchTab('admin-bobot')">
-        <span class="item-icon">⚖️</span> <span>Skala &amp; Bobot Aspek</span>
+        <span class="item-icon">${NAV_ICONS.bobot}</span> <span>Skala &amp; Bobot Aspek</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'admin-periode' ? 'active' : ''}" onclick="switchTab('admin-periode')">
-        <span class="item-icon">📅</span> <span>Periode Penilaian</span>
+        <span class="item-icon">${NAV_ICONS.periode}</span> <span>Periode Penilaian</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'laporan' ? 'active' : ''}" onclick="switchTab('laporan')">
-        <span class="item-icon">📑</span> <span>Rekap &amp; Cetak Laporan</span>
+        <span class="item-icon">${NAV_ICONS.laporan}</span> <span>Rekap &amp; Cetak Laporan</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'ganti-sandi' ? 'active' : ''}" onclick="switchTab('ganti-sandi')">
-        <span class="item-icon">🔑</span> <span>Ganti Kata Sandi</span>
+        <span class="item-icon">${NAV_ICONS.sandi}</span> <span>Ganti Kata Sandi</span>
       </li>
     `;
   } else if (role === 'supervisor') {
     html = `
       <div class="sidebar-category">Menu Supervisor Operasional</div>
       <li class="sidebar-item ${db.activeTab === 'dashboard' ? 'active' : ''}" onclick="switchTab('dashboard')">
-        <span class="item-icon">📊</span> <span>Dashboard Pengawasan</span>
+        <span class="item-icon">${NAV_ICONS.dashboard}</span> <span>Dashboard Pengawasan</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'spv-input' ? 'active' : ''}" onclick="switchTab('spv-input')">
-        <span class="item-icon">✍️</span> <span>Input Penilaian Kinerja</span>
+        <span class="item-icon">${NAV_ICONS.input}</span> <span>Input Penilaian Kinerja</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'spv-finalisasi' ? 'active' : ''}" onclick="switchTab('spv-finalisasi')">
-        <span class="item-icon">🔒</span> <span>Review &amp; Finalisasi</span>
+        <span class="item-icon">${NAV_ICONS.finalisasi}</span> <span>Review &amp; Finalisasi</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'laporan' ? 'active' : ''}" onclick="switchTab('laporan')">
-        <span class="item-icon">📑</span> <span>Rekap Nilai Karyawan</span>
+        <span class="item-icon">${NAV_ICONS.laporan}</span> <span>Rekap Nilai Karyawan</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'ganti-sandi' ? 'active' : ''}" onclick="switchTab('ganti-sandi')">
-        <span class="item-icon">🔑</span> <span>Ganti Kata Sandi</span>
+        <span class="item-icon">${NAV_ICONS.sandi}</span> <span>Ganti Kata Sandi</span>
       </li>
     `;
   } else if (role === 'karyawan') {
     html = `
       <div class="sidebar-category">Portal Karyawan Cleaning</div>
       <li class="sidebar-item ${db.activeTab === 'karyawan-scorecard' ? 'active' : ''}" onclick="switchTab('karyawan-scorecard')">
-        <span class="item-icon">📜</span> <span>Hasil Penilaian Kinerja</span>
+        <span class="item-icon">${NAV_ICONS.scorecard}</span> <span>Hasil Penilaian Kinerja</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'karyawan-feedback' ? 'active' : ''}" onclick="switchTab('karyawan-feedback')">
-        <span class="item-icon">💬</span> <span>Beri Tanggapan (Feedback)</span>
+        <span class="item-icon">${NAV_ICONS.feedback}</span> <span>Beri Tanggapan (Feedback)</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'karyawan-profil' ? 'active' : ''}" onclick="switchTab('karyawan-profil')">
-        <span class="item-icon">👤</span> <span>Profil Saya</span>
+        <span class="item-icon">${NAV_ICONS.profil}</span> <span>Profil Saya</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'ganti-sandi' ? 'active' : ''}" onclick="switchTab('ganti-sandi')">
-        <span class="item-icon">🔑</span> <span>Ganti Kata Sandi</span>
+        <span class="item-icon">${NAV_ICONS.sandi}</span> <span>Ganti Kata Sandi</span>
       </li>
     `;
   }
 
   menuContainer.innerHTML = html;
 }
+
+// Ikon mata SVG profesional untuk toggle password
+const SVG_EYE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+const SVG_EYE_OFF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
 
 // --- VIEW: GANTI KATA SANDI ---
 function renderGantiSandiView(db) {
@@ -4836,19 +4875,18 @@ function renderGantiSandiView(db) {
           <label class="form-label" for="old-password">Kata Sandi Saat Ini</label>
           <div style="position: relative;">
             <input type="password" id="old-password" class="form-input" placeholder="Masukkan kata sandi saat ini" required autocomplete="current-password" style="padding-right: 42px;">
-            <button type="button" onclick="togglePassField('old-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.05rem;" title="Lihat/Sembunyikan Sandi">👁️</button>
+            <button type="button" onclick="togglePassField('old-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;" title="Lihat/Sembunyikan Sandi">${SVG_EYE}</button>
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="new-password">Kata Sandi Baru</label>
           <div style="position: relative;">
-            <input type="password" id="new-password" class="form-input" placeholder="Minimal 5 karakter & minimal 2 karakter berbeda" required autocomplete="new-password" style="padding-right: 42px;">
-            <button type="button" onclick="togglePassField('new-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.05rem;" title="Lihat/Sembunyikan Sandi">👁️</button>
+            <input type="password" id="new-password" class="form-input" placeholder="Minimal 5 karakter &amp; minimal 2 karakter berbeda" required autocomplete="new-password" style="padding-right: 42px;">
+            <button type="button" onclick="togglePassField('new-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;" title="Lihat/Sembunyikan Sandi">${SVG_EYE}</button>
           </div>
-          <div style="margin-top: 6px; font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: flex-start; gap: 5px;">
-            <span style="font-size: 0.9rem;">ℹ️</span>
-            <span>Syarat: <strong>Minimal 5 karakter</strong> dan mempunyai <strong>minimal 2 karakter berbeda</strong> (contoh: <code>sandi1</code>, <code>iss26</code>).</span>
+          <div style="margin-top: 6px; font-size: 0.78rem; color: var(--text-muted);">
+            Syarat: <strong>Minimal 5 karakter</strong> dan mempunyai <strong>minimal 2 karakter berbeda</strong>.
           </div>
         </div>
 
@@ -4856,13 +4894,13 @@ function renderGantiSandiView(db) {
           <label class="form-label" for="confirm-password">Konfirmasi Kata Sandi Baru</label>
           <div style="position: relative;">
             <input type="password" id="confirm-password" class="form-input" placeholder="Ketik ulang kata sandi baru" required autocomplete="new-password" style="padding-right: 42px;">
-            <button type="button" onclick="togglePassField('confirm-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.05rem;" title="Lihat/Sembunyikan Sandi">👁️</button>
+            <button type="button" onclick="togglePassField('confirm-password', this)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;" title="Lihat/Sembunyikan Sandi">${SVG_EYE}</button>
           </div>
         </div>
 
         <div style="margin-top: 24px; display: flex; gap: 12px;">
           <button type="submit" class="btn btn-primary" style="flex: 1;">
-            💾 Simpan Sandi Baru
+            Simpan Sandi Baru
           </button>
           <button type="button" class="btn btn-outline" onclick="switchTab('dashboard')">
             Batal
@@ -4879,10 +4917,10 @@ function togglePassField(fieldId, btn) {
   if (!el) return;
   if (el.type === 'password') {
     el.type = 'text';
-    if (btn) btn.innerText = '🙈';
+    if (btn) btn.innerHTML = SVG_EYE_OFF;
   } else {
     el.type = 'password';
-    if (btn) btn.innerText = '👁️';
+    if (btn) btn.innerHTML = SVG_EYE;
   }
 }
 
@@ -4910,7 +4948,7 @@ function handleProsesGantiSandi(e) {
         alertEl.style.background = '#fee2e2';
         alertEl.style.borderLeft = '4px solid #ef4444';
         alertEl.style.color = '#b91c1c';
-        alertEl.innerHTML = `⚠️ <strong>Pemberitahuan Kesalahan:</strong><br>${message}`;
+        alertEl.innerHTML = `<strong>Pemberitahuan Kesalahan:</strong><br>${message}`;
       }
     }
     if (isSuccess) {
@@ -5027,7 +5065,7 @@ function handleProsesGantiSandi(e) {
   saveDb(db);
 
   // Tampilkan notifikasi keberhasilan
-  setAlert(`✅ <strong>Kata Sandi Berhasil Diubah!</strong><br>Kata sandi baru Anda telah aktif. Anda dapat langsung menggunakan kata sandi baru ini saat login.`, true);
+  setAlert(`<strong>Kata Sandi Berhasil Diubah!</strong><br>Kata sandi baru Anda telah aktif. Anda dapat langsung menggunakan kata sandi baru ini saat login.`, true);
 
   // Kosongkan form
   if (oldPassInput) oldPassInput.value = '';
@@ -5112,7 +5150,7 @@ function renderDashboardView(role, db) {
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Total Karyawan CS</span>
-          <span class="stat-icon">👥</span>
+          <span class="stat-icon">${NAV_ICONS.users}</span>
         </div>
         <div class="stat-value">${totalKaryawan}</div>
         <div class="stat-desc">Area Penempatan PEMDA Tangsel</div>
@@ -5121,7 +5159,7 @@ function renderDashboardView(role, db) {
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Penilaian Selesai</span>
-          <span class="stat-icon">✅</span>
+          <span class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></span>
         </div>
         <div class="stat-value">${finalCount} <span style="font-size:1rem;color:var(--text-muted)">/ ${totalKaryawan}</span></div>
         <div class="stat-desc">${draftCount} data berstatus DRAFT</div>
@@ -5130,7 +5168,7 @@ function renderDashboardView(role, db) {
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Rata-Rata Nilai</span>
-          <span class="stat-icon">⭐</span>
+          <span class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></span>
         </div>
         <div class="stat-value">${avgScore}</div>
         <div class="stat-desc">Predikat: <strong>${avgKategori} (Grade ${avgGrade})</strong></div>
@@ -5139,7 +5177,7 @@ function renderDashboardView(role, db) {
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Periode Terpilih</span>
-          <span class="stat-icon">📅</span>
+          <span class="stat-icon">${NAV_ICONS.periode}</span>
         </div>
         <div class="stat-value" style="font-size:1.25rem">${currentPeriode.nama.replace('Periode ', '')}</div>
         <div class="stat-desc">
@@ -5154,7 +5192,7 @@ function renderDashboardView(role, db) {
     <div class="panel">
       <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
         <div class="panel-title">
-          <span>📋</span> <span>Rekapitulasi Nilai Kinerja Petugas Cleaning Service</span>
+          <span>Rekapitulasi Nilai Kinerja Petugas Cleaning Service</span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
           <span id="rekap-count-badge" class="panel-badge" style="font-weight: 700; color: var(--iss-navy);">
@@ -5167,7 +5205,7 @@ function renderDashboardView(role, db) {
       <div class="dashboard-filter-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; background: #f8fafc; padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
         <!-- Input Pencarian Nama Karyawan / NIK / Gedung -->
         <div style="position: relative; flex: 1; min-width: 260px;">
-          <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; pointer-events: none; color: #94a3b8;">🔍</span>
+          <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; pointer-events: none; color: #94a3b8;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
           <input 
             type="text" 
             id="dashboard-search-karyawan" 
@@ -5233,13 +5271,13 @@ function renderDashboardView(role, db) {
                     <td><span class="grade-badge grade-${p.grade}">${p.grade}</span></td>
                     <td>
                       ${p.status === 'FINAL' 
-                        ? '<span class="badge badge-success">🔒 FINAL</span>' 
-                        : '<span class="badge badge-warning">📝 DRAFT</span>'}
+                        ? '<span class="badge badge-success">FINAL</span>' 
+                        : '<span class="badge badge-warning">DRAFT</span>'}
                     </td>
                     ${isSupervisor ? `
                       <td style="text-align:center">
                         <button class="btn btn-sm btn-outline" onclick="openEditPenilaianModal(${p.id})" title="Edit Nilai Karyawan" style="padding: 4px 10px; font-size: 0.76rem; font-weight: 600;">
-                          ✏️ Edit
+                          Edit
                         </button>
                       </td>
                     ` : ''}
@@ -5257,11 +5295,11 @@ function renderDashboardView(role, db) {
                     <td style="color:var(--text-dim)">-</td>
                     <td style="color:var(--text-dim)">-</td>
                     <td style="color:var(--text-dim)">-</td>
-                    <td><span class="badge" style="background:#f1f5f9;color:#64748b">⏳ Belum Dinilai</span></td>
+                    <td><span class="badge" style="background:#f1f5f9;color:#64748b">Belum Dinilai</span></td>
                     ${isSupervisor ? `
                       <td style="text-align:center">
                         <button class="btn btn-sm btn-primary" onclick="switchTab('spv-input')" title="Beri Penilaian" style="padding: 4px 10px; font-size: 0.76rem; font-weight: 600;">
-                          ✍️ Nilai
+                          Nilai
                         </button>
                       </td>
                     ` : ''}
@@ -5300,7 +5338,7 @@ function renderAdminUsersView(db) {
       <!-- Toolbar Pencarian Pengguna -->
       <div style="margin-bottom: 18px;">
         <div style="position: relative; max-width: 400px;">
-          <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; pointer-events: none; color: #94a3b8;">🔍</span>
+          <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; pointer-events: none; color: #94a3b8;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
           <input 
             type="text" 
             id="user-search-input" 
@@ -5342,14 +5380,14 @@ function renderAdminUsersView(db) {
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   <button class="btn btn-outline btn-sm" onclick="openEditUserModal(${u.id})" title="Edit Data & Status Pengguna" style="padding: 4px 8px; font-size: 0.76rem; font-weight: 600;">
-                    ✏️ Edit
+                    Edit
                   </button>
                   <button class="btn btn-outline btn-sm" onclick="promptChangeUserPassword(${u.id})" title="Ubah Kata Sandi" style="padding: 4px 8px; font-size: 0.76rem; font-weight: 600; margin-left: 4px;">
-                    🔑 Sandi
+                    Sandi
                   </button>
                   ${u.role !== 'admin' ? `
                     <button class="btn btn-outline btn-sm" onclick="deleteUser(${u.id})" title="Hapus Pengguna" style="padding: 4px 8px; font-size: 0.76rem; color: var(--danger); border-color: #fecaca; margin-left: 4px;">
-                      🗑️
+                      Hapus
                     </button>
                   ` : ''}
                 </td>
@@ -5408,7 +5446,7 @@ function renderAdminKaryawanView(db) {
                 </td>
                 <td style="text-align: center;">
                   <button class="btn btn-outline btn-sm" onclick="openEditKaryawanStatusModal(${k.id})" style="padding: 4px 10px; font-size: 0.76rem; font-weight: 600;">
-                    ✏️ Edit Status
+                    Edit Status
                   </button>
                   <button class="btn btn-outline btn-sm" onclick="hapusKaryawan(${k.id})" style="padding: 4px 10px; font-size: 0.76rem; color: var(--danger); border-color: #fecaca; margin-left: 4px;">
                     Hapus
@@ -5574,10 +5612,10 @@ function renderAdminPeriodeView(db) {
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   ${p.status === 'Aktif' 
-                    ? `<button class="btn btn-outline btn-sm" onclick="toggleStatusPeriode(${p.id})" style="padding: 4px 8px; font-size: 0.76rem; font-weight: 600;">🔒 Tutup Periode</button>` 
-                    : `<button class="btn btn-outline btn-sm" onclick="toggleStatusPeriode(${p.id})" style="padding: 4px 8px; font-size: 0.76rem; font-weight: 600; color: var(--success); border-color: #bbf7d0;">🔓 Aktifkan</button>`}
+                    ? `<button class="btn btn-outline btn-sm" onclick="toggleStatusPeriode(${p.id})" style="padding: 4px 8px; font-size: 0.76rem; font-weight: 600;">Tutup Periode</button>` 
+                    : `<button class="btn btn-outline btn-sm" onclick="toggleStatusPeriode(${p.id})" style="padding: 4px 8px; font-size: 0.76rem; font-weight: 600; color: var(--success); border-color: #bbf7d0;">Aktifkan</button>`}
                   <button class="btn btn-outline btn-sm" onclick="hapusPeriode(${p.id})" title="Hapus Periode" style="padding: 4px 8px; font-size: 0.76rem; color: var(--danger); border-color: #fecaca; margin-left: 4px;">
-                    🗑️
+                    Hapus
                   </button>
                 </td>
               </tr>
@@ -5687,8 +5725,8 @@ function renderSpvInputView(db) {
           <textarea id="catatan-spv" class="form-input" rows="3" placeholder="Tuliskan catatan apresiasi atau evaluasi kinerja..."></textarea>
           
           <div style="display:flex; gap:10px; margin-top:16px;">
-            <button class="btn btn-outline" style="flex:1" onclick="simpanPenilaian('DRAFT')">💾 Simpan DRAFT</button>
-            <button class="btn btn-primary" style="flex:1" onclick="simpanPenilaian('FINAL')">🔒 Simpan &amp; Finalisasi</button>
+            <button class="btn btn-outline" style="flex:1" onclick="simpanPenilaian('DRAFT')">Simpan DRAFT</button>
+            <button class="btn btn-primary" style="flex:1" onclick="simpanPenilaian('FINAL')">Simpan &amp; Finalisasi</button>
           </div>
         </div>
       </div>
@@ -5696,7 +5734,7 @@ function renderSpvInputView(db) {
       <!-- Live Calculation Card -->
       <div>
         <div class="calculator-card">
-          <div class="calc-title">⚡ Kalkulator Nilai Otomatis</div>
+          <div class="calc-title">Kalkulator Nilai Otomatis</div>
           <div class="score-display-box">
             <div class="final-score-number" id="live-nilai-akhir">86.05</div>
             <div class="final-grade-badge grade-A" id="live-grade-badge">PREDIKAT: SANGAT BAIK (A)</div>
@@ -5864,13 +5902,13 @@ function renderSpvFinalisasiView(db) {
                   <td style="max-width:280px;font-size:0.8rem;color:var(--text-secondary)">${p.catatanSpv || '-'}</td>
                   <td>
                     ${p.status === 'FINAL' 
-                      ? '<span class="badge badge-success">🔒 FINAL</span>' 
-                      : '<span class="badge badge-warning">📝 DRAFT</span>'}
+                      ? '<span class="badge badge-success">FINAL</span>' 
+                      : '<span class="badge badge-warning">DRAFT</span>'}
                   </td>
                   <td>
                     ${p.status === 'FINAL'
                       ? `<button class="btn btn-outline btn-sm" disabled style="opacity:0.6">Terkunci</button>`
-                      : `<button class="btn btn-success btn-sm" onclick="finalisasiSatuPenilaian(${p.id})">🔒 Kunci &amp; Finalisasi</button>`
+                      : `<button class="btn btn-success btn-sm" onclick="finalisasiSatuPenilaian(${p.id})">Kunci &amp; Finalisasi</button>`
                     }
                   </td>
                 </tr>
@@ -5910,7 +5948,7 @@ function renderLaporanView(db) {
       </div>
       <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 8px; background: white; padding: 6px 14px; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-          <span style="font-size: 0.85rem; font-weight: 600; color: var(--iss-navy);">📅 Pilih Periode Laporan:</span>
+          <span style="font-size: 0.85rem; font-weight: 600; color: var(--iss-navy);">Pilih Periode Laporan:</span>
           <select id="laporan-select-periode" class="form-input" style="padding: 4px 10px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--iss-navy);" onchange="handleSelectPeriodeLaporan(this.value)">
             ${db.periode.map(p => `
               <option value="${p.id}" ${p.id === currentLaporanPeriodeId ? 'selected' : ''}>
@@ -5919,7 +5957,10 @@ function renderLaporanView(db) {
             `).join('')}
           </select>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Cetak / Ekspor PDF Resmi</button>
+        <button class="btn btn-primary btn-sm" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 6px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Cetak / Ekspor PDF Resmi
+        </button>
       </div>
     </div>
 
@@ -6038,7 +6079,7 @@ function renderKaryawanScorecardView(db) {
       </div>
       <div>
         <span class="badge ${p.status === 'FINAL' ? 'badge-success' : 'badge-warning'}" style="padding:6px 14px">
-          ${p.status === 'FINAL' ? '🔒 RESMI TERVERIFIKASI (FINAL)' : '📝 STATUS: ' + p.status}
+          ${p.status === 'FINAL' ? 'RESMI TERVERIFIKASI (FINAL)' : 'STATUS: ' + p.status}
         </span>
       </div>
     </div>
@@ -6047,7 +6088,7 @@ function renderKaryawanScorecardView(db) {
       <div class="scorecard-header">
         <div class="employee-card-meta">
           <div class="employee-photo" style="width:64px; height:64px; font-size:1.6rem; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:50%; font-weight:800; flex-shrink:0;">
-            ${currentKaryawan.nama ? currentKaryawan.nama.charAt(0) : '🧹'}
+            ${currentKaryawan.nama ? currentKaryawan.nama.charAt(0) : 'K'}
           </div>
           <div class="employee-info">
             <h3>${currentKaryawan.nama}</h3>
@@ -6106,12 +6147,12 @@ function renderKaryawanScorecardView(db) {
       </div>
 
       <div class="feedback-box">
-        <h4 style="font-size:0.85rem; font-weight:700; color:var(--iss-navy); margin-bottom:6px">💬 Catatan Pembinaan Supervisor (Budi Prasetyo):</h4>
+        <h4 style="font-size:0.85rem; font-weight:700; color:var(--iss-navy); margin-bottom:6px">Catatan Pembinaan Supervisor:</h4>
         <p style="font-size:0.86rem; color:var(--text-main); font-style:italic">"${p.catatanSpv}"</p>
       </div>
 
       <div style="margin-top:20px; text-align:right">
-        <button class="btn btn-primary" onclick="switchTab('karyawan-feedback')">💬 Tulis Tanggapan Karyawan &rarr;</button>
+        <button class="btn btn-primary" onclick="switchTab('karyawan-feedback')">Tulis Tanggapan Karyawan &rarr;</button>
       </div>
     </div>
   `;
@@ -6143,8 +6184,8 @@ function renderKaryawanFeedbackView(db) {
       <div class="panel-header">
         <div class="panel-title">Formulir Tanggapan Kinerja</div>
         ${hasFeedback 
-          ? '<span class="badge badge-success">✅ Tanggapan Sudah Terkirim</span>' 
-          : '<span class="badge badge-warning">⏳ Menunggu Tanggapan</span>'}
+          ? '<span class="badge badge-success">Tanggapan Sudah Terkirim</span>' 
+          : '<span class="badge badge-warning">Menunggu Tanggapan</span>'}
       </div>
 
       <div style="background:var(--bg-subtle); padding:14px; border-radius:var(--radius-md); margin-bottom:18px;">
@@ -6155,7 +6196,7 @@ function renderKaryawanFeedbackView(db) {
 
       ${hasFeedback ? `
         <div class="feedback-box">
-          <span class="badge badge-success" style="margin-bottom:8px">🔒 Tanggapan Tersimpan di Sistem</span>
+          <span class="badge badge-success" style="margin-bottom:8px">Tanggapan Tersimpan di Sistem</span>
           <p style="font-size:0.88rem; color:var(--text-main); line-height:1.6; margin-bottom:6px">"${p.feedbackKaryawan}"</p>
           <div style="font-size:0.74rem; color:var(--text-muted)">Waktu kirim: ${p.tglFeedback}</div>
         </div>
@@ -6230,7 +6271,7 @@ function renderKaryawanProfilView(db) {
     <div class="panel" style="max-width:540px; margin:0 auto">
       <div style="display:flex; gap:16px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border-color)">
         <div class="employee-photo" style="width:72px; height:72px; font-size:1.8rem; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:50%; font-weight:800; flex-shrink:0;">
-          ${k.nama ? k.nama.charAt(0) : '👤'}
+          ${k.nama ? k.nama.charAt(0) : 'K'}
         </div>
         <div>
           <h3 style="font-size:1.25rem; font-weight:800; color:var(--iss-navy); margin:0 0 4px 0;">${k.nama}</h3>

@@ -134,8 +134,9 @@
           </div>
         </div>
 
-        <button class="btn btn-outline btn-sm" onclick="handleLogout()" style="color:var(--danger); border-color:#fecaca">
-          🚪 <span class="logout-text">Keluar</span>
+        <button class="btn btn-outline btn-sm" onclick="handleLogout()" style="color:var(--danger); border-color:#fecaca; display:inline-flex; align-items:center; gap:5px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span class="logout-text">Keluar</span>
         </button>
       </div>
     </header>
@@ -172,7 +173,7 @@
     <div class="modal-window" style="max-width: 650px;">
       <div class="modal-header">
         <div>
-          <h3 style="margin-bottom: 4px;">✏️ Edit Penilaian Kinerja Karyawan</h3>
+          <h3 style="margin-bottom: 4px;">Edit Penilaian Kinerja Karyawan</h3>
           <p id="edit-modal-subtitle" style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">
             Karyawan: AMINUDIN (NIK: R1634454)
           </p>
@@ -240,8 +241,8 @@
         <div class="form-group" style="margin-top: 14px;">
           <label class="form-label" for="edit-select-status">Status Penilaian</label>
           <select id="edit-select-status" class="form-input">
-            <option value="FINAL">🔒 FINAL (Terkunci &amp; Resmi)</option>
-            <option value="DRAFT">📝 DRAFT (Draf Sementara)</option>
+            <option value="FINAL">FINAL (Terkunci &amp; Resmi)</option>
+            <option value="DRAFT">DRAFT (Draf Sementara)</option>
           </select>
         </div>
 
@@ -253,7 +254,7 @@
 
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeEditPenilaianModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="handleSaveEditPenilaian()">💾 Simpan Perubahan</button>
+        <button type="button" class="btn btn-primary" onclick="handleSaveEditPenilaian()">Simpan Perubahan</button>
       </div>
     </div>
   </div>
@@ -262,7 +263,7 @@
   <div id="modal-edit-user" class="modal-overlay">
     <div class="modal-window" style="max-width: 540px;">
       <div class="modal-header">
-        <h3 style="margin: 0;">✏️ Edit Data &amp; Hak Akses Pengguna</h3>
+        <h3 style="margin: 0;">Edit Data &amp; Hak Akses Pengguna</h3>
         <button class="btn-close" onclick="closeEditUserModal()" aria-label="Tutup">&times;</button>
       </div>
       <div class="modal-body">
@@ -305,7 +306,7 @@
       </div>
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeEditUserModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="saveEditUser()">💾 Simpan Perubahan</button>
+        <button type="button" class="btn btn-primary" onclick="saveEditUser()">Simpan Perubahan</button>
       </div>
     </div>
   </div>
@@ -314,7 +315,7 @@
   <div id="modal-add-user" class="modal-overlay">
     <div class="modal-window" style="max-width: 540px;">
       <div class="modal-header">
-        <h3 style="margin: 0;">➕ Tambah Pengguna Baru</h3>
+        <h3 style="margin: 0;">Tambah Pengguna Baru</h3>
         <button class="btn-close" onclick="closeAddUserModal()" aria-label="Tutup">&times;</button>
       </div>
       <div class="modal-body">
@@ -352,7 +353,7 @@
       </div>
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeAddUserModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="saveAddUser()">➕ Daftarkan Akun</button>
+        <button type="button" class="btn btn-primary" onclick="saveAddUser()">Daftarkan Akun</button>
       </div>
     </div>
   </div>
@@ -361,7 +362,7 @@
   <div id="modal-tambah-periode" class="modal-overlay" onclick="if(event.target === this) closeTambahPeriodeModal()">
     <div class="modal-window" style="max-width: 520px;">
       <div class="modal-header">
-        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--iss-navy);">📅 Buka Periode Penilaian Baru</h3>
+        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--iss-navy);">Buka Periode Penilaian Baru</h3>
         <button class="btn-close" onclick="closeTambahPeriodeModal()" aria-label="Tutup">&times;</button>
       </div>
       <div class="modal-body">
@@ -400,7 +401,7 @@
       </div>
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeTambahPeriodeModal()">Batal</button>
-        <button type="button" class="btn btn-primary" onclick="simpanTambahPeriode()">💾 Buka &amp; Simpan Periode</button>
+        <button type="button" class="btn btn-primary" onclick="simpanTambahPeriode()">Buka &amp; Simpan Periode</button>
       </div>
     </div>
   </div>

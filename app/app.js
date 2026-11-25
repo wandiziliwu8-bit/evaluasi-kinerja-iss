@@ -2200,8 +2200,8 @@ const INITIAL_DATA = {
 ]
 };
 
-// --- DATA PERSISTENCE (BUMP KEY TO pt_iss_auth_v11 DENGAN PENGECEKAN LENGKAP) ---
-const STORAGE_KEY = 'pt_iss_auth_v11';
+// --- DATA PERSISTENCE (BUMP KEY TO pt_iss_auth_v12 DENGAN PENGECEKAN LENGKAP) ---
+const STORAGE_KEY = 'pt_iss_auth_v12';
 
 function getDb() {
   const data = localStorage.getItem(STORAGE_KEY);
@@ -2235,6 +2235,35 @@ function formatTanggalIndo(dateStr) {
   const bln = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const bIndex = parseInt(parts[1], 10) - 1;
   return `${parseInt(parts[2], 10)} ${bln[bIndex] || parts[1]} ${parts[0]}`;
+}
+
+// Helper sinkronisasi karyawan yang sedang login
+function getCurrentKaryawan(db) {
+  if (!db || !db.currentUser) return (db && db.karyawan) ? db.karyawan[0] : null;
+  const u = db.currentUser;
+  let k = null;
+  if (u.karyawanId) {
+    k = db.karyawan.find(item => item.id === Number(u.karyawanId));
+  }
+  if (!k && u.nik) {
+    k = db.karyawan.find(item => String(item.nik).toLowerCase() === String(u.nik).toLowerCase());
+  }
+  if (!k && u.username) {
+    k = db.karyawan.find(item => String(item.nik).toLowerCase() === String(u.username).toLowerCase());
+  }
+  if (!k && u.nama) {
+    k = db.karyawan.find(item => item.nama.toLowerCase() === u.nama.toLowerCase());
+  }
+  if (!k) {
+    k = {
+      id: u.id || 999,
+      nik: u.nik || u.username || '-',
+      nama: u.nama || 'Pengguna',
+      jabatan: u.role === 'supervisor' ? 'Supervisor Operasional' : (u.role === 'admin' ? 'Administrator HRD' : 'Cleaner'),
+      status: u.status || 'Tetap'
+    };
+  }
+  return k;
 }
 
 // --- UTILITY KALKULASI & TOAST ---
@@ -2588,7 +2617,7 @@ function renderSidebar(role) {
         <span class="item-icon">💬</span> <span>Beri Tanggapan (Feedback)</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'karyawan-profil' ? 'active' : ''}" onclick="switchTab('karyawan-profil')">
-        <span class="item-icon">👤</span> <span>Profil &amp; Penempatan</span>
+        <span class="item-icon">👤</span> <span>Profil Saya</span>
       </li>
       <li class="sidebar-item ${db.activeTab === 'ganti-sandi' ? 'active' : ''}" onclick="switchTab('ganti-sandi')">
         <span class="item-icon">🔑</span> <span>Ganti Kata Sandi</span>
@@ -3683,8 +3712,11 @@ function renderLaporanView(db) {
 // 9. HASIL PENILAIAN SAYA (KARYAWAN)
 // ==========================================================================
 function renderKaryawanScorecardView(db) {
-  const currentKaryawan = db.karyawan.find(k => k.id === (db.currentUser?.karyawanId || 1)) || db.karyawan[0];
-  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === 1) || {
+  const currentKaryawan = getCurrentKaryawan(db);
+  const currentPeriodeId = Number(db.selectedPeriodeId || 1);
+  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === currentPeriodeId) 
+         || db.penilaian.find(item => item.karyawanId === currentKaryawan.id) 
+         || {
     nilaiAkhir: 0,
     grade: '-',
     kategori: 'Belum Dinilai',
@@ -3704,18 +3736,22 @@ function renderKaryawanScorecardView(db) {
         <p>Evaluasi kinerja berkala petugas Cleaning Service PT ISS Indonesia</p>
       </div>
       <div>
-        <span class="badge badge-success" style="padding:6px 14px">🔒 RESMI TERVERIFIKASI (FINAL)</span>
+        <span class="badge ${p.status === 'FINAL' ? 'badge-success' : 'badge-warning'}" style="padding:6px 14px">
+          ${p.status === 'FINAL' ? '🔒 RESMI TERVERIFIKASI (FINAL)' : '📝 STATUS: ' + p.status}
+        </span>
       </div>
     </div>
 
     <div class="scorecard-panel">
       <div class="scorecard-header">
         <div class="employee-card-meta">
-          <div class="employee-photo">🧹</div>
+          <div class="employee-photo" style="width:64px; height:64px; font-size:1.6rem; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:50%; font-weight:800; flex-shrink:0;">
+            ${currentKaryawan.nama ? currentKaryawan.nama.charAt(0) : '🧹'}
+          </div>
           <div class="employee-info">
             <h3>${currentKaryawan.nama}</h3>
-            <p>NIK: <strong>${currentKaryawan.nik}</strong> &bull; Jabatan: <strong>${currentKaryawan.jabatan}</strong></p>
-            <p>Penempatan: <strong>${currentKaryawan.gedung}</strong> &bull; Supervisor: <strong>SAYUTI</strong></p>
+            <p>NIK: <strong>${currentKaryawan.nik}</strong> &bull; Jabatan: <strong>${currentKaryawan.jabatan || 'Cleaner'}</strong> &bull; Status: <strong>${currentKaryawan.status || 'Tetap'}</strong></p>
+            <p>Unit Kerja: <strong>PT ISS Indonesia &bull; PEMDA Tangerang Selatan</strong> &bull; Supervisor: <strong>SAYUTI</strong></p>
           </div>
         </div>
 
@@ -3784,10 +3820,14 @@ function renderKaryawanScorecardView(db) {
 // 10. BERI TANGGAPAN (KARYAWAN)
 // ==========================================================================
 function renderKaryawanFeedbackView(db) {
-  const currentKaryawan = db.karyawan.find(k => k.id === (db.currentUser?.karyawanId || 1)) || db.karyawan[0];
-  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === 1) || {
+  const currentKaryawan = getCurrentKaryawan(db);
+  const currentPeriodeId = Number(db.selectedPeriodeId || 1);
+  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === currentPeriodeId) 
+         || db.penilaian.find(item => item.karyawanId === currentKaryawan.id) 
+         || {
     nilaiAkhir: 0, grade: '-', kategori: 'Belum Dinilai', feedbackKaryawan: null
   };
+  const currentPeriode = db.periode.find(per => per.id === currentPeriodeId) || { nama: 'Oktober 2026' };
   const hasFeedback = p && p.feedbackKaryawan;
 
   return `
@@ -3808,7 +3848,7 @@ function renderKaryawanFeedbackView(db) {
 
       <div style="background:var(--bg-subtle); padding:14px; border-radius:var(--radius-md); margin-bottom:18px;">
         <p style="font-size:0.82rem; color:var(--text-secondary)">
-          Nilai Anda: <strong style="color:var(--iss-navy)">${p.nilaiAkhir.toFixed(2)} (${p.grade} - ${p.kategori})</strong> &bull; Periode: Oktober 2026
+          Nilai Anda: <strong style="color:var(--iss-navy)">${p.nilaiAkhir.toFixed(2)} (${p.grade} - ${p.kategori})</strong> &bull; Periode: ${currentPeriode.nama}
         </p>
       </div>
 
@@ -3838,16 +3878,16 @@ function kirimFeedbackKaryawan(e) {
   e.preventDefault();
   const teks = document.getElementById('input-feedback-teks').value.trim();
 
-  if (teks.length < 35) {
+  if (teks.length < 10) {
     alert('Tanggapan wajib diisi minimal 10 karakter!');
     return;
   }
 
   const db = getDb();
-  const currentKaryawan = db.karyawan.find(k => k.id === (db.currentUser?.karyawanId || 1)) || db.karyawan[0];
-  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === 1) || {
-    nilaiAkhir: 0, grade: '-', kategori: 'Belum Dinilai', feedbackKaryawan: null
-  };
+  const currentKaryawan = getCurrentKaryawan(db);
+  const currentPeriodeId = Number(db.selectedPeriodeId || 1);
+  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === currentPeriodeId) 
+         || db.penilaian.find(item => item.karyawanId === currentKaryawan.id);
   if (p) {
     p.feedbackKaryawan = teks;
     const now = new Date();
@@ -3855,15 +3895,17 @@ function kirimFeedbackKaryawan(e) {
     saveDb(db);
     showToast('Tanggapan Anda berhasil disimpan!', 'success');
     renderContent();
+  } else {
+    showToast('Data penilaian untuk periode ini belum tersedia.', 'warning');
   }
 }
 
 function editFeedbackAgain() {
   const db = getDb();
-  const currentKaryawan = db.karyawan.find(k => k.id === (db.currentUser?.karyawanId || 1)) || db.karyawan[0];
-  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === 1) || {
-    nilaiAkhir: 0, grade: '-', kategori: 'Belum Dinilai', feedbackKaryawan: null
-  };
+  const currentKaryawan = getCurrentKaryawan(db);
+  const currentPeriodeId = Number(db.selectedPeriodeId || 1);
+  const p = db.penilaian.find(item => item.karyawanId === currentKaryawan.id && item.periodeId === currentPeriodeId) 
+         || db.penilaian.find(item => item.karyawanId === currentKaryawan.id);
   if (p) {
     p.feedbackKaryawan = null;
     saveDb(db);
@@ -3875,45 +3917,49 @@ function editFeedbackAgain() {
 // 11. PROFIL KARYAWAN (KARYAWAN)
 // ==========================================================================
 function renderKaryawanProfilView(db) {
-  const k = db.karyawan.find(item => item.id === 1);
+  const k = getCurrentKaryawan(db);
   return `
     <div class="page-header">
       <div class="page-title-group">
-        <h2>Profil Petugas Kebersihan</h2>
-        <p>Data penempatan kerja PT ISS Indonesia</p>
+        <h2>Profil Karyawan</h2>
+        <p>Informasi data diri dan status kepegawaian petugas PT ISS Indonesia</p>
       </div>
     </div>
 
-    <div class="panel" style="max-width:650px; margin:0 auto">
+    <div class="panel" style="max-width:540px; margin:0 auto">
       <div style="display:flex; gap:16px; align-items:center; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border-color)">
-        <div class="employee-photo" style="width:72px; height:72px; font-size:1.8rem">👨‍💼</div>
+        <div class="employee-photo" style="width:72px; height:72px; font-size:1.8rem; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:white; border-radius:50%; font-weight:800; flex-shrink:0;">
+          ${k.nama ? k.nama.charAt(0) : '👤'}
+        </div>
         <div>
-          <h3 style="font-size:1.2rem; color:var(--iss-navy)">${k.nama}</h3>
-          <p style="color:var(--text-secondary); font-weight:600">${k.jabatan}</p>
-          <span class="badge badge-success" style="margin-top:4px">${k.status}</span>
+          <h3 style="font-size:1.25rem; font-weight:800; color:var(--iss-navy); margin:0 0 4px 0;">${k.nama}</h3>
+          <p style="color:var(--text-secondary); font-weight:600; margin:0 0 6px 0;">${k.jabatan || 'Cleaner'}</p>
+          <span class="badge ${k.status === 'Tetap' ? 'badge-success' : 'badge-warning'}">
+            Karyawan ${k.status || 'Tetap'}
+          </span>
         </div>
       </div>
 
       <div class="breakdown-list">
-        <div class="breakdown-item">
-          <span class="label">Nomor Induk Karyawan (NIK):</span>
-          <span class="val"><code>${k.nik}</code></span>
+        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+          <span class="label" style="font-weight: 600; color: var(--text-secondary);">Nama Lengkap:</span>
+          <span class="val" style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">${k.nama}</span>
         </div>
-        <div class="breakdown-item">
-          <span class="label">Instansi Penempatan:</span>
-          <span class="val">Pemerintah Kota Tangerang Selatan</span>
+        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+          <span class="label" style="font-weight: 600; color: var(--text-secondary);">Nomor Induk Karyawan (NIK):</span>
+          <span class="val"><code style="font-weight: 700; font-size: 0.95rem; color: var(--iss-navy); background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">${k.nik}</code></span>
         </div>
-        <div class="breakdown-item">
-          <span class="label">Titik Lokasi Kerja:</span>
-          <span class="val">${k.gedung}</span>
+        <div class="breakdown-item" style="padding: 12px 0; border-bottom: 1px solid #f1f5f9;">
+          <span class="label" style="font-weight: 600; color: var(--text-secondary);">Jabatan:</span>
+          <span class="val" style="font-weight: 600; color: var(--text-main);">${k.jabatan || 'Cleaner'}</span>
         </div>
-        <div class="breakdown-item">
-          <span class="label">Shift Operasional:</span>
-          <span class="val">${k.shift}</span>
-        </div>
-        <div class="breakdown-item">
-          <span class="label">Supervisor Pengawas:</span>
-          <span class="val">Budi Prasetyo, S.T.</span>
+        <div class="breakdown-item" style="padding: 12px 0;">
+          <span class="label" style="font-weight: 600; color: var(--text-secondary);">Status Karyawan:</span>
+          <span class="val">
+            <span class="badge ${k.status === 'Tetap' ? 'badge-success' : 'badge-warning'}" style="font-weight: 700;">
+              ${k.status || 'Tetap'}
+            </span>
+          </span>
         </div>
       </div>
     </div>
